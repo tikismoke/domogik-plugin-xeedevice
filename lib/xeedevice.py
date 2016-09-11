@@ -167,7 +167,13 @@ class XEEclass:
                 val = self.readXeeApiStatus(carid)
                 if val != "failed":
 		    self._log.debug(val.signals)
-		    data={}
+		    speed = u''
+		    odometer = u''
+		    fuel_level = u''
+		    battery_voltage = u''
+		    position = u''
+		    lock_status = u''
+		    ignition_status = u''
 		    for t in val.signals:
 			if t.name == "VehiculeSpeed":
 			    speed = t.value
@@ -177,10 +183,13 @@ class XEEclass:
 			    fuel_level = t.value
 			elif t.name == "BatteryVoltage":
 			    battery_voltage = t.value
-
+			elif t.name == "LockSts":
+			    lock_status = t.value
+			elif t.name == "IgnitionSts":
+			    ignition_status = t.value
 		    position = str(val.location.latitude) + "," + str(val.location.longitude)
                     send(deviceid, {'position' : position , 'fuel_level' : fuel_level, 'battery_voltage' : battery_voltage,
-			'odometer' : odometer, 'speed' : speed})
+			'odometer' : odometer, 'speed' : speed, 'lock_status' : lock_status, 'ignition_status' : ignition_status })
 
             self._log.debug(u"=> '{0}' : wait for {1} seconds".format(devicename, self.period))
             stop.wait(self.period)

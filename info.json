@@ -142,6 +142,34 @@
                 "expire": 0,
                 "round_value": 0
 	    }
+	},
+	"lock_status": {
+	    "name": "Lock Status",
+	    "data_type": "DT_OpenClose",
+	    "conversion": "",
+	    "incremental": false,
+	    "timeout": 0,
+	    "history": {
+		"store": true,
+		"duplicate": false,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+	    }
+	},
+	"ignition_status": {
+	    "name": "Ignition Status",
+	    "data_type": "DT_Switch",
+	    "conversion": "",
+	    "incremental": false,
+	    "timeout": 0,
+	    "history": {
+		"store": true,
+		"duplicate": false,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+	    }
 	}
     },
     "xpl_stats": {},
@@ -164,7 +192,7 @@
 	    "description": "Xee Car status",
 	    "name": "Xee car status",
 	    "commands": [],
-	    "sensors": ["position", "speed", "odometer", "battery_voltage", "fuel_level"],
+	    "sensors": ["position", "speed", "odometer", "battery_voltage", "fuel_level", "lock_status", "ignition_status"],
 	    "parameters": [{
 		"key": "carid",
 		"xpl": false,
