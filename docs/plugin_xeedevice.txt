@@ -16,6 +16,13 @@ Purpose
 =======
 This Domogik plugin XeeDevices allow user to see informations from xee API (Car/Car.status).
 
+You Need to create a Xee dev account here https://dev.xee.com/register and create an apps.
+
+In redirect url don't forget to put http://localhost and for Scopes select all.
+
+Here is an the related docs from xee apidoc: https://dev.xee.com/doc/setup/README.html
+
+Save your apps Id and Secret. You will need them later to configure the plugin.
 
 
 Plugin configuration
