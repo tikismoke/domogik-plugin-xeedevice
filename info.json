@@ -1,0 +1,191 @@
+{
+    "configuration": [{
+        "description": "client_id of your xee dev apps account",
+        "key": "client_id",
+        "name": "Client ID",
+        "required": "yes",
+        "default": "",
+        "type": "string"
+    }, {
+        "description": "client_secret of your xee dev apps account",
+        "key": "client_secret",
+        "name": "Client SECRET",
+        "required": "yes",
+        "default": "",
+        "type": "string"
+    }, {
+        "description": "redirect url of your xee dev apps account",
+        "key": "redirect_url",
+        "name": "Redirect URL",
+        "required": "yes",
+        "default": "http://localhost",
+        "type": "string"
+    }, {
+    	"description": "Refresh period in seconds",
+    	"key": "period",
+    	"name": "Period",
+    	"required": "yes",
+    	"default": "600",
+    	"type": "integer"
+    }],
+    "commands": {},
+    "xpl_commands": {},
+    "sensors": {
+	"carid": {
+	    "name": "carid",
+	    "data_type": "DT_Number",
+	    "conversion": "",
+	    "incremental": false,
+	    "timeout": 0,
+	    "history": {
+		"store": true,
+		"duplicate": false,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+	    }
+	},
+	"name": {
+	    "name": "Name",
+	    "data_type": "DT_String",
+	    "conversion": "",
+	    "incremental": false,
+	    "timeout": 0,
+	    "history": {
+		"store": true,
+		"duplicate": false,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+	    }
+	},
+	"make": {
+	    "name": "Make",
+	    "data_type": "DT_String",
+	    "conversion": "",
+	    "incremental": false,
+	    "timeout": 0,
+	    "history": {
+		"store": true,
+		"duplicate": false,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+	    }
+	},
+	"position": {
+	    "name": "Position",
+	    "data_type": "DT_CoordD",
+	    "conversion": "",
+	    "incremental": false,
+	    "timeout": 0,
+	    "history": {
+		"store": true,
+		"duplicate": false,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+	    }
+	},
+	"speed": {
+	    "name": "Speed",
+	    "data_type": "DT_kmhSpeed",
+	    "conversion": "",
+	    "incremental": false,
+	    "timeout": 0,
+	    "history": {
+		"store": true,
+		"duplicate": false,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+	    }
+	},
+	"odometer": {
+	    "name": "Odomoeter",
+	    "data_type": "DT_kMeter",
+	    "conversion": "",
+	    "incremental": false,
+	    "timeout": 0,
+	    "history": {
+		"store": true,
+		"duplicate": false,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+	    }
+	},
+	"battery_voltage": {
+	    "name": "BatteryVoltage",
+	    "data_type": "DT_Volt",
+	    "conversion": "",
+	    "incremental": false,
+	    "timeout": 0,
+	    "history": {
+		"store": true,
+		"duplicate": false,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+	    }
+	},
+	"fuel_level": {
+	    "name": "FuelLevel",
+	    "data_type": "DT_Number",
+	    "conversion": "",
+	    "incremental": false,
+	    "timeout": 0,
+	    "history": {
+		"store": true,
+		"duplicate": false,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+	    }
+	}
+    },
+    "xpl_stats": {},
+    "device_types": {
+	"xee.car": {
+	    "id": "xee.car",
+	    "description": "Xee Car",
+	    "name": "Xee car",
+	    "commands": [],
+	    "sensors": ["name", "carid", "make"],
+	    "parameters": [{
+		"key": "carid",
+		"xpl": false,
+		"description": "carid of the car",
+		"type": "integer"
+	    }]
+	},
+	"xee.car.status": {
+	    "id": "xee.car.status",
+	    "description": "Xee Car status",
+	    "name": "Xee car status",
+	    "commands": [],
+	    "sensors": ["position", "speed", "odometer", "battery_voltage", "fuel_level"],
+	    "parameters": [{
+		"key": "carid",
+		"xpl": false,
+		"description": "carid of the car",
+		"type": "integer"
+	    }]
+	}
+    },
+    "identity": {
+	"author": "tikismoke",
+	"author_email": "new.domodroid at gmail.com",
+	"tags": ["xee, cloud, car"],
+	"dependencies": [{
+	    "id": "xee-sdk-python (>=3.0.1)",
+	    "type": "python"
+	}],
+	"description": "Plugin for XeeConnect car device",
+	"domogik_min_version": "0.5.0",
+	"name": "xeedevice",
+	"type": "plugin",
+	"version": "0.1"
+    },
+    "json_version": 2
+}
