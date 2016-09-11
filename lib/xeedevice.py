@@ -83,22 +83,23 @@ class XEEclass:
 		    print "Getting user"
 		    user ,error = self.xee.get_user(self.token.access_token)
 		    if error != None :
-		        print "Error getting user, try refreshing with token_refresh from file"
-		        print error
+	                self._log.warning(u"Error getting user, try refreshing with token_refresh from file")
+		        self._log.warning(error)
 		        self.token,error = self.xee.get_token_from_refresh_token(self.token.refresh_token)
 		        if error != None :
-		            print error
+	                    self._log.error(u"Error getting user, from refresh token")
+		            self._log.error(error)
 		            sys.exit("refreshing token failed from refresh_token")
 
 	    except:
-	        print "Error with file saved or no file saved"
-	        print("Go to %s allow the app and copy your oauth_verifier" %login_url)
+                self._log.error(u"Error with file saved or no file saved")
+	        self._log.error(u"Go to %s allow the app and copy your oauth_verifier" %login_url)
 	        authorization_code = raw_input('Please enter your authorization_code: ')
 	        self.token , error = self.xee.get_token_from_code(authorization_code)
 	        if error != None :
-	            print "Error getting token from code"
-	            print error
-	            print "Exiting"
+	            self._log.warning(u"Error getting token from code")
+	            self._log.warning(error)
+	            self._log.warning(u"Exiting")
 	            sys.exit("refresh Error")
 
 	    with open(xee_config_file, 'w') as xee_token_file:
