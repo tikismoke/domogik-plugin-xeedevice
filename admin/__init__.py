@@ -45,9 +45,10 @@ def index(client_id):
         return render_template('plugin_xeedevice.html',
             clientid = client_id,
             client_detail = detail,
-            mactive="clients",
+            mactive = "clients",
             active = 'advanced',
-            errorlog = get_info_from_log(geterrorlogcmd))
+            errorlog = get_info_from_log(geterrorlogcmd)),
+	    Token = unicode(du vlala, 'utf-8')
 
     except TemplateNotFound:
         abort(404)

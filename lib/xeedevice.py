@@ -99,8 +99,7 @@ class XEEclass:
                     self._log.warning(u"Error getting token from code")
                     self._log.warning(error)
                     self._log.warning(u"Exiting")
-                    sys.exit("refresh Error")
-                    self._force_leave()
+		    #TODO stop plugin
 
             with open(xee_config_file, 'w') as xee_token_file:
                 pickle.dump(self.token, xee_token_file)
@@ -138,7 +137,7 @@ class XEEclass:
     # -------------------------------------------------------------------------------------------------
     def readXeeApiStatus(self, carid):
         """
-        read the xee api position information
+        read the xee api status information
         """
         try:
             carstatus ,error = self.xee.get_status(int(carid),self.token.access_token)
@@ -162,34 +161,34 @@ class XEEclass:
                 val = self.readXeeApiCar(carid)
                 if val != "failed":
                     send(deviceid, {'name': val.name, 'make': val.make, 'carid': val.id})
-                elif device_type == "xee.car.status":
-                    val = self.readXeeApiStatus(carid)
-                    if val != "failed":
-                        self._log.debug(val.signals)
-                        speed = u''
-                        odometer = u''
-                        fuel_level = u''
-                        battery_voltage = u''
-                        position = u''
-                        lock_status = u''
-                        ignition_status = u''
-                        for t in val.signals:
-                            if t.name == "VehiculeSpeed":
-                                speed = t.value
-                            elif t.name == "Odometer":
-                                odometer = t.value
-                            elif t.name == "FuelLevel":
-                                fuel_level = t.value
-                            elif t.name == "BatteryVoltage":
-                                battery_voltage = t.value
-                            elif t.name == "LockSts":
-                                lock_status = t.value
-                            elif t.name == "IgnitionSts":
-                                ignition_status = t.value
-                        position = str(val.location.latitude) + "," + str(val.location.longitude)
-                        send(deviceid, {'position' : position , 'fuel_level' : fuel_level, 'battery_voltage' : battery_voltage,
-                                        'odometer' : odometer, 'speed' : speed, 'lock_status' : lock_status,
-                                        'ignition_status' : ignition_status })
-
-            self._log.debug(u"=> '{0}' : wait for {1} seconds".format(devicename, self.period))
-            stop.wait(self.period)
+            elif device_type == "xee.car.status":
+                val = self.readXeeApiStatus(carid)
+                if val != "failed":
+                    self._log.debug(val.signals)
+                    speed = u''
+                    odometer = u''
+                    fuel_level = u''
+                    battery_voltage = u''
+                    position = u''
+                    lock_status = u''
+                    ignition_status = u''
+                    for t in val.signals:
+                        if t.name == "VehiculeSpeed":
+                            speed = t.value
+                        elif t.name == "Odometer":
+                            odometer = t.value
+                        elif t.name == "FuelLevel":
+                            fuel_level = t.value
+                        elif t.name == "BatteryVoltage":
+                            battery_voltage = t.value
+                        elif t.name == "LockSts":
+                            lock_status = t.value
+                        elif t.name == "IgnitionSts":
+                            ignition_status = t.value
+                    position = str(val.location.latitude) + "," + str(val.location.longitude)
+                    send(deviceid, {'position' : position , 'fuel_level' : fuel_level, 'battery_voltage' : battery_voltage,
+                                    'odometer' : odometer, 'speed' : speed, 'lock_status' : lock_status,
+                                    'ignition_status' : ignition_status })
+            
+	    self._log.debug(u"=> '{0}' : wait for {1} seconds".format(devicename, self.period))
+    	    stop.wait(self.period)
