@@ -38,7 +38,7 @@ try:
     from xee import Xee
     import xee.entities as xee_entities
 except RuntimeError:
-    print("Error importing xee!")
+    self._log.debug(u"Error importing xee!")
 import sys
 import os
 import pickle
@@ -78,9 +78,9 @@ class XEEclass:
             xee_config_file = os.path.join(os.path.dirname(__file__), '../data/xee_token.sav')
             try:
                 with open(xee_config_file, 'r') as xee_token_file:
-                    print "Opening File"
+                    self._log.debug(u"Opening File")
                     self.token = pickle.load(xee_token_file)
-                    print "Getting user"
+                    self._log.debug(u"Getting user")
                     user ,error = self.xee.get_user(self.token.access_token)
                     if error != None :
                         self._log.warning(u"Error getting user, try refreshing with token_refresh from file")

@@ -79,7 +79,6 @@ class xeeManager(Plugin):
             self.XEEclass = XEEclass(self.log, client_id, client_secret, redirect_url, period)
         except xeeException as e:
             self.log.error(e.value)
-            print(e.value)
             self.force_leave()
             return
 
