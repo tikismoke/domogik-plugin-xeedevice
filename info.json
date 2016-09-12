@@ -32,7 +32,7 @@
     "xpl_commands": {},
     "sensors": {
 	"carid": {
-	    "name": "carid",
+	    "name": "Car ID",
 	    "data_type": "DT_Number",
 	    "conversion": "",
 	    "incremental": false,
@@ -102,7 +102,7 @@
 	    }
 	},
 	"odometer": {
-	    "name": "Odomoeter",
+	    "name": "Odometer",
 	    "data_type": "DT_kMeter",
 	    "conversion": "",
 	    "incremental": false,
@@ -116,7 +116,7 @@
 	    }
 	},
 	"battery_voltage": {
-	    "name": "BatteryVoltage",
+	    "name": "Battery Voltage",
 	    "data_type": "DT_Volt",
 	    "conversion": "",
 	    "incremental": false,
@@ -130,8 +130,8 @@
 	    }
 	},
 	"fuel_level": {
-	    "name": "FuelLevel",
-	    "data_type": "DT_Number",
+	    "name": "Fuel Level",
+	    "data_type": "DT_VolumeLiter",
 	    "conversion": "",
 	    "incremental": false,
 	    "timeout": 0,
