@@ -5,15 +5,48 @@
 {% include theme("client_menu.html") %}
 <div class="container">
     <div class="panel panel-default">
-		<div class="panel-heading"><h4>{% trans %}Generating a Code for Token{% endtrans %}</h4></div>
-			<div class="panel-body">
-				<pre>{{ token }}</pre>
-			</div>
-		<div class="panel-heading"><h4>{% trans %}Last errors in plugin log{% endtrans %}</h4></div>
-			<div class="panel-body">
-				<pre>{{ errorlog }}</pre>
-			</div>
-	</div>
+                <div class="panel-heading"><h4>{% trans %}Generating a Code for Token{% endtrans %}</h4></div>
+                <div class="panel-body">
+                        <p>{% trans %}Open this lik into a new navigation window feel you Xee user account and give you authorisation to use it:{% endtrans %}</p>
+                        <p>{% trans %}It will return to a new blank page (maybe an error page) but it contain the code in the url address.{% endtrans %}</p>
+                        <pre>{{ token }}</pre>
+                        <p>{% trans %}Put you code here to generate saved token file in data.{% endtrans %}</p>
+                        <form method="POST">
+                            <div class="form-group">
+                                {{ form.code (rows=1, cols=50) }}
+                            </div>
+                            <button class="btn btn-info" type="submit">{% trans %}Generate token file{% endtrans %}</button>
+                        <p>{% trans %}You will need to restart plugin after generating the token file.{% endtrans %}</p>
+                        </form>
+                </div>
+        </div>
 </div>
 
+<div class="container">
+    <div class="panel panel-default">
+                <div class="panel-heading"><h4>{% trans %}List of available Car_Id in this xee account{% endtrans %}</h4></div>
+                <div class="panel-body">
+                        <pre>{{ car_id }}</pre>
+                </div>
+        </div>
+</div>
+
+<div class="container">
+    <div class="panel panel-default">
+                <div class="panel-heading"><h4>{% trans %}Current Token information{% endtrans %}</h4></div>
+                <div class="panel-body">
+                        <pre>{{ current_token }}</pre>
+                </div>
+        </div>
+</div>
+
+
+<div class="container">
+    <div class="panel panel-default">
+                <div class="panel-heading"><h4>{% trans %}Last errors in plugin log{% endtrans %}</h4></div>
+                <div class="panel-body">
+                        <pre>{{ errorlog }}</pre>
+                </div>
+        </div>
+</div>
 {% endblock %}
