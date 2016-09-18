@@ -91,6 +91,9 @@ class XEEclass:
                             self._log.error(error)
                             sys.exit("refreshing token failed from refresh_token")
                             #TODO stop plugin
+                        else :
+                            self._log.warning(u"Token succesfully refresh with token_refresh from file")
+
 
                 with open(xee_config_file, 'w') as xee_token_file:
                     pickle.dump(self.token, xee_token_file)

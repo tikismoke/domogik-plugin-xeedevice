@@ -14,7 +14,7 @@ import subprocess
 import os
 import pickle
 import datetime
-from domogik.common.utils import get_data_files_directory_for_plugin
+#from domogik.common.utils import get_data_files_directory_for_plugin
 from flask_wtf import Form
 from wtforms import StringField
 
@@ -29,6 +29,9 @@ except ImportError:
 ### plugin specific imports
 from xee import Xee
 import xee.entities as xee_entities
+
+#TODO
+#from domogik_packages.plugin_xeedevice.bin.xeedevice import TOKEN_SAV
 
 ### package specific functions
 
@@ -101,6 +104,8 @@ template_dir = "{0}/{1}/admin/templates".format(get_packages_directory(), packag
 static_dir = "{0}/{1}/admin/static".format(get_packages_directory(), package)
 geterrorlogcmd = "{0}/{1}/admin/geterrorlog.sh".format(get_packages_directory(), package)
 
+#TODO
+#xee_config_file = os.path.join(get_data_files_directory_for_plugin("xeedevice"), TOKEN_SAV)
 xee_config_file = os.path.join(os.path.dirname(__file__), '../data/xee_token.sav')
 
 
