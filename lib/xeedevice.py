@@ -90,19 +90,17 @@ class XEEclass:
                             self._log.error(u"Error getting user, from refresh token")
                             self._log.error(error)
                             sys.exit("refreshing token failed from refresh_token")
+                            #TODO stop plugin
+
+                with open(xee_config_file, 'w') as xee_token_file:
+                    pickle.dump(self.token, xee_token_file)
+
             except:
                 self._log.error(u"Error with file saved or no file saved")
-                self._log.error(u"Go to %s allow the app and copy your oauth_verifier" %login_url)
-                authorization_code = raw_input('Please enter your authorization_code: ')
-                self.token , error = self.xee.get_token_from_code(authorization_code)
-                if error != None :
-                    self._log.warning(u"Error getting token from code")
-                    self._log.warning(error)
-                    self._log.warning(u"Exiting")
-		    #TODO stop plugin
+                self._log.error(u"Go to Advanced page to generate a new token file")
+                #TODO stop plugin
 
-            with open(xee_config_file, 'w') as xee_token_file:
-                pickle.dump(self.token, xee_token_file)
+
         except ValueError:
             self._log.error(u"error reading Xee.")
             return
