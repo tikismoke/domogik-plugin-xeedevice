@@ -131,7 +131,7 @@ def index(client_id):
             client_detail = detail,
             mactive = "clients",
             active = 'advanced',
-            token = get_token_link(xee_client_id,xee_client_secret,xee_redirect_url),
+            get_token_url = get_token_link(xee_client_id,xee_client_secret,xee_redirect_url),
             form = form,
             car_id = get_car_list(xee_client_id,xee_client_secret,xee_redirect_url),
             current_token = show_current_token(),
