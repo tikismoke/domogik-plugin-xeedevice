@@ -46,6 +46,14 @@ In Domogik administration section, go to client plugin-xeedevice details page.
 +----------------+----------------------+-------------------------------------------------------------------------------+
 
 
+Generating token from admin page
+--------------------------------
+Once you have saved your credentails in Configuration go to the Advanced page to generate a token file.
+
+In section **"Generating a Code for Token"** open th proposed link in a new tab to get the code from url after you validate the needed autorisation.
+
+Paste the code in the input and clic on genrate token file.
+
 Creating devices for xee device
 -------------------------------
 In clients page of admin UI, go to **plugin-xeedevice-<your_host_domogik>**, select tab **"Devices"**, **"New"** to create your devices.
