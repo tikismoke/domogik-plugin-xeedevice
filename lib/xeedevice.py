@@ -76,8 +76,9 @@ class XEEclass:
 		        redirect_uri = self.redirect_url)
             login_url = self.xee.get_authentication_url() + "&redirect_uri=" + self.redirect_url
             xee_config_file = os.path.join(os.path.dirname(__file__), '../data/xee_token.sav')
+#	    self.open_token()
             try:
-                with open(xee_config_file, 'r') as xee_token_file:
+    	        with open(xee_config_file, 'r') as xee_token_file:
                     self._log.debug(u"Opening File")
                     self.token = pickle.load(xee_token_file)
                     self._log.debug(u"Getting user")
@@ -93,8 +94,6 @@ class XEEclass:
                             #TODO stop plugin
                         else :
                             self._log.warning(u"Token succesfully refresh with token_refresh from file")
-
-
                 with open(xee_config_file, 'w') as xee_token_file:
                     pickle.dump(self.token, xee_token_file)
 
@@ -102,7 +101,6 @@ class XEEclass:
                 self._log.error(u"Error with file saved or no file saved")
                 self._log.error(u"Go to Advanced page to generate a new token file")
                 #TODO stop plugin
-
 
         except ValueError:
             self._log.error(u"error reading Xee.")
@@ -117,6 +115,7 @@ class XEEclass:
 
     def CtoF(self, t):
         return (t*9)/5+32
+
 
     # -------------------------------------------------------------------------------------------------
     def readXeeApiCar(self, carid):
