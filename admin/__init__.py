@@ -63,7 +63,10 @@ def get_car_list(client_id,client_secret,redirect_url):
     with open(xee_config_file, 'r') as xee_token_file:
         token = pickle.load(xee_token_file)
         cars ,error = xee.get_cars(token.access_token)
-        if error == None:
+        if error != None:
+            error_string = str(error)
+            return error
+        else :
             return_car =""
             for car in cars:
                 car_id = str(car.id)
@@ -71,9 +74,6 @@ def get_car_list(client_id,client_secret,redirect_url):
                 return_car += "CarId: " + car_id + " for car Name: " + car_name +"\n"
             cars_string = str(return_car)
             return cars_string
-        else :
-            error_string = unicode(error, 'utf-8')
-            return error
 
 def show_current_token():
     with open(xee_config_file, 'r') as xee_token_file:
