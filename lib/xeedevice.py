@@ -19,7 +19,7 @@ along with Domogik. If not, see U{http://www.gnu.org/licenses}.
 Plugin purpose
 ==============
 
-Plugin for NEST protect and thermostat
+Plugin for Xee connect car device
 
 Implements
 ==========
@@ -75,8 +75,11 @@ class XEEclass:
 			client_secret = self.client_secret,
 		        redirect_uri = self.redirect_url)
             login_url = self.xee.get_authentication_url() + "&redirect_uri=" + self.redirect_url
-            xee_config_file = os.path.join(os.path.dirname(__file__), '../data/xee_token.sav')
-#	    self.open_token()
+            self.xee_config_file = os.path.join(os.path.dirname(__file__), '../data/xee_token.sav')
+	    self.open_token(self.xee)
+
+        except ValueError:
+            self._log.error(u"error reading Xee.")
             try:
     	        with open(xee_config_file, 'r') as xee_token_file:
                     self._log.debug(u"Opening File")
@@ -97,24 +100,35 @@ class XEEclass:
                 with open(xee_config_file, 'w') as xee_token_file:
                     pickle.dump(self.token, xee_token_file)
 
-            except:
-                self._log.error(u"Error with file saved or no file saved")
-                self._log.error(u"Go to Advanced page to generate a new token file")
-                #TODO stop plugin
+            except ValueError:
+                self._log.error(u"error reading Xee.")
+                return
 
-        except ValueError:
-            self._log.error(u"error reading Xee.")
-            return
+    def open_token(self,xee):
+        try:
+            with open(self.xee_config_file, 'r') as xee_token_file:
+                self._log.debug(u"Opening File")
+                self.token = pickle.load(xee_token_file)
+                self._log.debug(u"Getting user")
+                user ,error = xee.get_user(self.token.access_token)
+                if error != None :
+                    self._log.warning(u"Error getting user, try refreshing with token_refresh from file")
+                    self._log.warning(error)
+                    self.token,error = xee.get_token_from_refresh_token(self.token.refresh_token)
+                    if error != None :
+                        self._log.error(u"Error getting user, from refresh token")
+                        self._log.error(error)
+                        sys.exit("refreshing token failed from refresh_token")
+                        #TODO stop plugin
+                    else :
+                        self._log.warning(u"Token succesfully refresh with token_refresh from file")
+            with open(self.xee_config_file, 'w') as xee_token_file:
+                pickle.dump(self.token, xee_token_file)
 
-    def boolify(self, s):
-        return (str)(s).lower() in['true' '1' 't' 'y' 'yes' 'on' 'enable'
-                                   'enabled']
-    
-    def epoch2date(self, epoch):
-        return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(epoch))
-
-    def CtoF(self, t):
-        return (t*9)/5+32
+        except:
+            self._log.error(u"Error with file saved or no file saved")
+            self._log.error(u"Go to Advanced page to generate a new token file")
+            #TODO stop plugin
 
 
     # -------------------------------------------------------------------------------------------------
@@ -128,10 +142,11 @@ class XEEclass:
                 self._log.debug(car)
                 return car
             else:
+        	self.open_token()
                 self._log.debug(error)
                 return "failed"
         except AttributeError:
-            self._log.error(u"### Sensor '%s', ERROR while reading value." % sensor)
+            self._log.error(u"### Car Id '%s', ERROR while reading car." % carid)
             return "failed"
 
     # -------------------------------------------------------------------------------------------------
@@ -145,10 +160,11 @@ class XEEclass:
                 self._log.debug(carstatus)
                 return carstatus
             else:
+		self.open_token()
                 self._log.debug(error)
                 return "failed"
         except AttributeError:
-            self._log.error(u"### Sensor '%s', ERROR while reading value." % sensor)
+            self._log.error(u"### Car Id '%s', ERROR while reading car status." % carid)
             return "failed"
 
 
