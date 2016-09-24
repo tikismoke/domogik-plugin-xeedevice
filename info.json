@@ -170,6 +170,48 @@
                 "expire": 0,
                 "round_value": 0
 	    }
+	},
+	"headlight_status": {
+	    "name": "Head Light Status",
+	    "data_type": "DT_Switch",
+	    "conversion": "",
+	    "incremental": false,
+	    "timeout": 0,
+	    "history": {
+		"store": true,
+		"duplicate": false,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+	    }
+	},
+	"highbeam_status": {
+	    "name": "High Beam Status",
+	    "data_type": "DT_Switch",
+	    "conversion": "",
+	    "incremental": false,
+	    "timeout": 0,
+	    "history": {
+		"store": true,
+		"duplicate": false,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+	    }
+	},
+	"lowbeam_status": {
+	    "name": "Low Beam Status",
+	    "data_type": "DT_Switch",
+	    "conversion": "",
+	    "incremental": false,
+	    "timeout": 0,
+	    "history": {
+		"store": true,
+		"duplicate": false,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+	    }
 	}
     },
     "xpl_stats": {},
@@ -192,7 +234,7 @@
 	    "description": "Xee Car status",
 	    "name": "Xee car status",
 	    "commands": [],
-	    "sensors": ["position", "speed", "odometer", "battery_voltage", "fuel_level", "lock_status", "ignition_status"],
+	    "sensors": ["position", "speed", "odometer", "battery_voltage", "fuel_level", "lock_status", "ignition_status", "headlight_status", "highbeam_status", "lowbeam_status"],
 	    "parameters": [{
 		"key": "carid",
 		"xpl": false,
@@ -206,7 +248,7 @@
 	"author_email": "new.domodroid at gmail.com",
 	"tags": ["xee, cloud, car"],
 	"dependencies": [{
-	    "id": "xee-sdk-python (>=3.0.1)",
+	    "id": "xee-sdk-python (>=3.0.2)",
 	    "type": "python"
 	}],
 	"description": "Plugin for XeeConnect car device",

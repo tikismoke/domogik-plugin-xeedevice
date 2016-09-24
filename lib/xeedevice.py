@@ -172,6 +172,9 @@ class XEEclass:
                     position = u''
                     lock_status = u''
                     ignition_status = u''
+                    headlight_status = u''
+                    highbeam_status = u''
+                    lowbeam_status = u''
                     for t in val.signals:
                         if t.name == "VehiculeSpeed":
                             speed = t.value
@@ -185,10 +188,17 @@ class XEEclass:
                             lock_status = t.value
                         elif t.name == "IgnitionSts":
                             ignition_status = t.value
+                        elif t.name == "HeadLightSts":
+                            headlight_status = t.value
+                        elif t.name == "HighBeamSts":
+                            highbeam_status = t.value
+                        elif t.name == "LowBeamSts":
+                            lowbeam_status = t.value
                     position = str(val.location.latitude) + "," + str(val.location.longitude)
                     send(deviceid, {'position' : position , 'fuel_level' : fuel_level, 'battery_voltage' : battery_voltage,
                                     'odometer' : odometer, 'speed' : speed, 'lock_status' : lock_status,
-                                    'ignition_status' : ignition_status })
+                                    'ignition_status' : ignition_status, 'headlight_status' : headlight_status,
+                                     'highbeam_status' : highbeam_status, 'lowbeam_status' : lowbeam_status})
             
 	    self._log.debug(u"=> '{0}' : wait for {1} seconds".format(devicename, self.period))
     	    stop.wait(self.period)
