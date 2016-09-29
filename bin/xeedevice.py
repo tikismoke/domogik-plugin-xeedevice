@@ -97,13 +97,12 @@ class xeeManager(Plugin):
         thread_sensors = threading.Thread(None,
                                           self.XEEclass.loop_read_sensor,
                                           'Main_reading_sensors',
-                                          (self.send_pub_data, self.get_stop()),
+                                          (self.send_pub_data, self.send_data, self.get_stop()),
                                           {})
         thread_sensors.start()
         self.register_thread(thread_sensors)
         self.ready()
 
-    # -------------------------------------------------------------------------------------------------
     def send_pub_data(self, device_id, value):
         """ Send the sensors values over MQ
         """
@@ -112,8 +111,8 @@ class xeeManager(Plugin):
         value_dumps = json.dumps(value)
         value_dict = json.loads(value_dumps)
         for sensor in self.sensors[device_id]:
-            self.log.debug(u"value receive : '%s' for sensors: '%s' " % (value_dict[sensor], sensor))
             data[self.sensors[device_id][sensor]] = value_dict[sensor]
+            self.log.debug(u"value receive : '%s' for sensors: '%s' " % (value_dict[sensor], sensor))
         self.log.debug(u"==> Update Sensor '%s' for device id %s (%s)" % (
             format(data), device_id, self.device_list[device_id]["name"]))  # {u'id': u'value'}
 
@@ -124,6 +123,19 @@ class xeeManager(Plugin):
             self.log.debug(u"Bad MQ message to send.MQ data is : {0}".format(data))
             pass
 
+    # -------------------------------------------------------------------------------------------------
+    def send_data(self, device_id, sensor_name, value, attimestamp):
+        """ Send the sensors values over MQ
+        """
+        self.log.debug(u"send_data : '%s' for sensor '%s' for device_id: '%s' " % (value, sensor_name, device_id))
+        sensor_id = self.sensors[device_id][sensor_name]
+        data = {sensor_id : value, 'atTimestamp' : attimestamp}
+        try:
+            self._pub.send_event('client.sensor', data)
+            return True, None
+        except:
+            self.log.debug(u"Error while sending sensor MQ message for sensor values : {0}".format(traceback.format_exc()))
+            return False, u"Error while sending sensor MQ message for sensor values : {0}".format(traceback.format_exc())
 
 if __name__ == "__main__":
     xeeManager()

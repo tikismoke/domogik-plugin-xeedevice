@@ -44,7 +44,9 @@ import sys
 import os
 import pickle
 import locale
-
+import time
+import datetime
+import calendar
 
 class xeeException(Exception):
     """
@@ -154,10 +156,10 @@ class XEEclass:
                 self._log.debug(car)
                 return car
             else:
-                self.open_token()
                 self._log.debug(error)
                 return "failed"
         except AttributeError:
+            self.open_token()
             self._log.error(u"### Car Id '%s', ERROR while reading car." % carid)
             return "failed"
 
@@ -172,15 +174,15 @@ class XEEclass:
                 self._log.debug(carstatus)
                 return carstatus
             else:
-                self.open_token()
                 self._log.debug(error)
                 return "failed"
         except AttributeError:
+            self.open_token()
             self._log.error(u"### Car Id '%s', ERROR while reading car status." % carid)
             return "failed"
 
     # -------------------------------------------------------------------------------------------------
-    def loop_read_sensor(self, send, stop):
+    def loop_read_sensor(self, send, send_sensor, stop):
         """
         """
         while not stop.isSet():
@@ -189,46 +191,56 @@ class XEEclass:
                     if sensor['device_type'] == "xee.car":
                         val = self.readXeeApiCar(sensor['sensor_carid'])
                         if val != "failed":
+# TODO to remove send
+#                            name = u''
+#                            make = u''
+#                            carid = u''
+#                            for sensor in val:
+#				print sensor
+#                                if sensor.name == "name":
+#                                    name = sensor.value
+##	                            send_sensor(sensor['device_id'],'name', name)
+#                                elif sensor.name == "make":
+#                                    make = sensor.value
+#	                            send_sensor(sensor['device_id'],'make', make)
+#                                elif sensor.name == "id":
+#                                    carid = sensor.value
+#	                            send_sensor(sensor['device_id'],'carid', carid)
                             send(sensor['device_id'], {'name': val.name, 'make': val.make, 'carid': val.id})
                     elif sensor['device_type'] == "xee.car.status":
                         val = self.readXeeApiStatus(sensor['sensor_carid'])
                         if val != "failed":
                             self._log.debug(val.signals)
-                            speed = u''
-                            odometer = u''
-                            fuel_level = u''
-                            battery_voltage = u''
+                            sensor_name = u''
                             position = u''
-                            lock_status = u''
-                            ignition_status = u''
-                            headlight_status = u''
-                            highbeam_status = u''
-                            lowbeam_status = u''
-                            for t in val.signals:
-                                if t.name == "VehiculeSpeed":
-                                    speed = t.value
-                                elif t.name == "Odometer":
-                                    odometer = t.value
-                                elif t.name == "FuelLevel":
-                                    fuel_level = t.value
-                                elif t.name == "BatteryVoltage":
-                                    battery_voltage = t.value
-                                elif t.name == "LockSts":
-                                    lock_status = t.value
-                                elif t.name == "IgnitionSts":
-                                    ignition_status = t.value
-                                elif t.name == "HeadLightSts":
-                                    headlight_status = t.value
-                                elif t.name == "HighBeamSts":
-                                    highbeam_status = t.value
-                                elif t.name == "LowBeamSts":
-                                    lowbeam_status = t.value
+                            for sensors in val.signals:
+                                if sensors.name == "VehiculeSpeed":
+                                    sensor_name = "speed"
+                                elif sensors.name == "Odometer":
+                                    sensor_name = "odometer"
+                                elif sensors.name == "FuelLevel":
+                                    sensor_name = "fuel_level"
+                                elif sensors.name == "BatteryVoltage":
+                                    sensor_name = "battery_voltage"
+                                elif sensors.name == "LockSts":
+                                    sensor_name = "lock_status"
+                                elif sensors.name == "IgnitionSts":
+                                    sensor_name = "ignition_status"
+                                elif sensors.name == "HeadLightSts":
+                                    sensor_name = "headlight_status"
+                                elif sensors.name == "HighBeamSts":
+                                    sensor_name = "highbeam_status"
+                                elif sensors.name == "LowBeamSts":
+                                    sensor_name = "lowbeam_status"
+                                if sensor_name != u'':
+                                    print sensors.date
+                                    timestamp = calendar.timegm(sensors.date.timetuple())
+                                    print timestamp
+                                    send_sensor(sensor['device_id'], sensor_name, sensors.value, timestamp)
+
                             position = str(val.location.latitude) + "," + str(val.location.longitude)
-                            send(sensor['device_id'],
-                                 {'position': position, 'fuel_level': fuel_level, 'battery_voltage': battery_voltage,
-                                  'odometer': odometer, 'speed': speed, 'lock_status': lock_status,
-                                  'ignition_status': ignition_status, 'headlight_status': headlight_status,
-                                  'highbeam_status': highbeam_status, 'lowbeam_status': lowbeam_status})
+                            if position != u'':
+                                send_sensor(sensor['device_id'],'position', position, timestamp)
                         self._log.debug(u"=> '{0}' : wait for {1} seconds".format(sensor['device_name'], self.period))
             except:
                 self._log.error(u"# Loop_read_sensors EXCEPTION")
