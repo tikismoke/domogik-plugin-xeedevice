@@ -211,9 +211,9 @@ class XEEclass:
                         val = self.readXeeApiStatus(sensor['sensor_carid'])
                         if val != "failed":
                             self._log.debug(val.signals)
-                            sensor_name = u''
                             position = u''
                             for sensors in val.signals:
+                                sensor_name = u''
                                 if sensors.name == "VehiculeSpeed":
                                     sensor_name = "speed"
                                 elif sensors.name == "Odometer":
@@ -233,13 +233,11 @@ class XEEclass:
                                 elif sensors.name == "LowBeamSts":
                                     sensor_name = "lowbeam_status"
                                 if sensor_name != u'':
-                                    print sensors.date
                                     timestamp = calendar.timegm(sensors.date.timetuple())
-                                    print timestamp
                                     send_sensor(sensor['device_id'], sensor_name, sensors.value, timestamp)
-
                             position = str(val.location.latitude) + "," + str(val.location.longitude)
                             if position != u'':
+                                timestamp = calendar.timegm(val.location.date.timetuple())
                                 send_sensor(sensor['device_id'],'position', position, timestamp)
                         self._log.debug(u"=> '{0}' : wait for {1} seconds".format(sensor['device_name'], self.period))
             except:
