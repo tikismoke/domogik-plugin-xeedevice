@@ -67,35 +67,41 @@ def generate_token_file(authorization_code,xee_client_id,xee_client_secret,xee_r
 
 
 def get_car_list(client_id,client_secret,redirect_url):
-    xee = Xee(client_id = client_id,
-                    client_secret = client_secret,
-                    redirect_uri = redirect_url)
-    with open(xee_config_file, 'r') as xee_token_file:
-        token = pickle.load(xee_token_file)
-        cars ,error = xee.get_cars(token.access_token)
-        if error != None:
-            error_string = str(error)
-            return error
-        else :
-            return_car =""
-            for car in cars:
-                car_id = str(car.id)
-                car_name = car.name
-                return_car += "CarId: " + car_id + " for car Name: " + car_name +"\n"
-            cars_string = str(return_car)
-            return cars_string
+    try:
+        xee = Xee(client_id = client_id,
+                        client_secret = client_secret,
+                        redirect_uri = redirect_url)
+        with open(xee_config_file, 'r') as xee_token_file:
+            token = pickle.load(xee_token_file)
+            cars ,error = xee.get_cars(token.access_token)
+            if error != None:
+                error_string = str(error)
+                return error
+            else :
+                return_car =""
+                for car in cars:
+                    car_id = str(car.id)
+                    car_name = car.name
+                    return_car += "CarId: " + car_id + " for car Name: " + car_name +"\n"
+                    cars_string = str(return_car)
+                    return cars_string
+    except:
+        return "Error"
 
 def show_current_token():
-    with open(xee_config_file, 'r') as xee_token_file:
-        token = pickle.load(xee_token_file)
-        this_token = token.access_token
-        this_refresh_token = token.refresh_token
-        this_token_expires = str(datetime.datetime.fromtimestamp(token.expires_at))
-        this_token = str("Token = " + this_token + "\n" )
-        this_refresh_token = str("Refresh token = " + this_refresh_token + "\n" )
-        this_token_expires = str("Expires on = " + this_token_expires + "\n")
-        result = this_token + this_refresh_token + this_token_expires
-    return result
+    try:
+        with open(xee_config_file, 'r') as xee_token_file:
+            token = pickle.load(xee_token_file)
+            this_token = token.access_token
+            this_refresh_token = token.refresh_token
+            this_token_expires = str(datetime.datetime.fromtimestamp(token.expires_at))
+            this_token = str("Token = " + this_token + "\n" )
+            this_refresh_token = str("Refresh token = " + this_refresh_token + "\n" )
+            this_token_expires = str("Expires on = " + this_token_expires + "\n")
+            result = this_token + this_refresh_token + this_token_expires
+        return result
+    except:
+        return "Error"
 
 def get_info_from_log(cmd):
     print("Command = %s" % cmd)
@@ -106,40 +112,42 @@ def get_info_from_log(cmd):
     return output
 
 def get_position(client_id,client_secret,redirect_url):
-    xee = Xee(client_id = client_id,
-                    client_secret = client_secret,
-                    redirect_uri = redirect_url)
-    with open(xee_config_file, 'r') as xee_token_file:
-        token = pickle.load(xee_token_file)
-        locations ,error = xee.get_locations("14113",token.access_token,limit=10)
-        if error != None:
-            error_string = str(error)
-            return error
-        else :
-            return_location =""
-	    data = {}
-	    cli = MQSyncReq(app.zmq_context)
-	    msg = MQMessage()
-            for location in locations:
-                lat = str(location.latitude)
-                lon = str(location.longitude)
-                date = str(location.date)
-    		date = date[:19]
-                timestamp = time.mktime(datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S" ).timetuple())
-		position = str( lat + ":" + lon)
-                return_location += str ("Lat: " + lat + " Lon: " + lon + " date: " + date + " timestamp: " + str(timestamp) + "\n")
-		msg.set_action('client.sensor')
-		msg.add_data('sensor_id', 1841)
-		msg.add_data('value', position)
-		msg.add_data('atTimestamp', timestamp)
-		print (msg.get())
-		print (cli.request('xplgw', msg.get(), timeout=10))
-#		data['1830'] = position
-#		data['atTimestamp'] = timestamp
-#		Plugin._pub.send_event('client.sensor', data)
-            locations_string = str(return_location)
-	    return locations_string
-    
+    try:
+        xee = Xee(client_id = client_id,
+                        client_secret = client_secret,
+                        redirect_uri = redirect_url)
+        with open(xee_config_file, 'r') as xee_token_file:
+            token = pickle.load(xee_token_file)
+            locations ,error = xee.get_locations("14113",token.access_token,limit=10)
+            if error != None:
+                error_string = str(error)
+                return error
+            else :
+                return_location =""
+                data = {}
+                cli = MQSyncReq(app.zmq_context)
+                msg = MQMessage()
+                for location in locations:
+                    lat = str(location.latitude)
+                    lon = str(location.longitude)
+                    date = str(location.date)
+                    date = date[:19]
+                    timestamp = time.mktime(datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S" ).timetuple())
+                    position = str( lat + ":" + lon)
+                    return_location += str ("Lat: " + lat + " Lon: " + lon + " date: " + date + " timestamp: " + str(timestamp) + "\n")
+                    msg.set_action('client.sensor')
+                    msg.add_data('sensor_id', 1841)
+                    msg.add_data('value', position)
+                    msg.add_data('atTimestamp', timestamp)
+                    print (msg.get())
+                    print (cli.request('xplgw', msg.get(), timeout=10))
+#			data['1830'] = position
+#			data['atTimestamp'] = timestamp
+#			Plugin._pub.send_event('client.sensor', data)
+                locations_string = str(return_location)
+                return locations_string
+    except:
+        return "Error"    
 
 class CodeForm(Form):
     code = StringField("code")
@@ -170,8 +178,8 @@ def index(client_id):
     information = ''
 
     if request.method == "POST":
+        generate_token_file(form.code.data,xee_client_id,xee_client_secret,xee_redirect_url)
 	information = get_position(xee_client_id,xee_client_secret,xee_redirect_url)
-#        generate_token_file(form.code.data,xee_client_id,xee_client_secret,xee_redirect_url)
 
     try:
         return render_template('plugin_xeedevice.html',
