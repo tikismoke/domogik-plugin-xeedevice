@@ -167,8 +167,8 @@ def index(client_id):
     information = ''
 
     if request.method == "POST":
-#        generate_token_file(form.code.data,xee_client_id,xee_client_secret,xee_redirect_url)
-	information = get_position(xee_client_id,xee_client_secret,xee_redirect_url)
+        generate_token_file(form.code.data,xee_client_id,xee_client_secret,xee_redirect_url)
+#	information = get_position(xee_client_id,xee_client_secret,xee_redirect_url)
 #	information = get_xeecar_info(False)
     try:
         return render_template('plugin_xeedevice.html',
