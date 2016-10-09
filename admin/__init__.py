@@ -31,17 +31,12 @@ except ImportError:
 from xee import Xee
 import xee.entities as xee_entities
 
-#TODO
-#from domogik_packages.plugin_xeedevice.bin.xeedevice import TOKEN_SAV
-#import domogik_packages.plugin_xeedevice.bin.xeedevice as xeedevice
-#from domogik.common.plugin import Plugin
-#from domogikmq.message import MQMessage
-#import zmq
 
-from domogikmq.reqrep.client import MQSyncReq
-from domogikmq.message import MQMessage
 from domogik.admin.application import app
-from domogik.common.utils import get_sanitized_hostname
+from domogikmq.pubsub.publisher import MQPub
+import zmq
+
+from domogik_packages.plugin_xeedevice.admin.views.tools import get_xeecar_info
 
 ### package specific functions
 
@@ -126,8 +121,7 @@ def get_position(client_id,client_secret,redirect_url):
             else :
                 return_location =""
                 data = {}
-                cli = MQSyncReq(app.zmq_context)
-                msg = MQMessage()
+		pub = MQPub(app.zmq_context, 'admin')
                 for location in locations:
                     lat = str(location.latitude)
                     lon = str(location.longitude)
@@ -136,15 +130,7 @@ def get_position(client_id,client_secret,redirect_url):
                     timestamp = time.mktime(datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S" ).timetuple())
                     position = str( lat + ":" + lon)
                     return_location += str ("Lat: " + lat + " Lon: " + lon + " date: " + date + " timestamp: " + str(timestamp) + "\n")
-                    msg.set_action('client.sensor')
-                    msg.add_data('sensor_id', 1841)
-                    msg.add_data('value', position)
-                    msg.add_data('atTimestamp', timestamp)
-                    print (msg.get())
-                    print (cli.request('xplgw', msg.get(), timeout=10))
-#			data['1830'] = position
-#			data['atTimestamp'] = timestamp
-#			Plugin._pub.send_event('client.sensor', data)
+		    pub.send_event('client.sensor', {"atTimestamp" : timestamp, '1870' : position})
                 locations_string = str(return_location)
                 return locations_string
     except:
