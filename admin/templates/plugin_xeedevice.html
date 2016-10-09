@@ -6,13 +6,8 @@
 
 <div class="container">
     <div class="panel panel-default">
-                <div class="panel-heading"><h4>{% trans %}Mass Import{% endtrans %}</h4></div>
                 <div class="panel-body">
-                        <form method="POST">
-                            <button class="btn btn-info" type="submit">{% trans %}Do a mass import{% endtrans %}</button>
-                        <p>{{ information }}</p>
-                        </form>
-
+		    <li><a href="./{{ clientid }}/import">{% trans %}Mass import data{% endtrans %}</a></li>
                 </div>
         </div>
 </div>
@@ -42,9 +37,18 @@
 
 <div class="container">
     <div class="panel panel-default">
-                <div class="panel-heading"><h4>{% trans %}List of available Car_Id in this xee account{% endtrans %}</h4></div>
+                <div class="panel-heading"><h4>{% trans %}List of available CarId in this xee account{% endtrans %}</h4></div>
                 <div class="panel-body">
-                        <pre>{{ car_id }}</pre>
+		    <table class='table'>
+            	        <thead>
+        	            <tr><th>{% trans %}Car Id  (Clic to create device){% endtrans %}</th><th>{% trans %}Car name{% endtrans %}</th><th>{% trans %}Make{% endtrans %}</th></tr>
+    	                </thead>
+	                <tbody>
+	                    {% for car in car_id %}
+                        	<tr><td><a href="/client/{{ clientid }}/dmg_devices/new/type/xee.car.status?name={{ car.name }}&carid={{ car.id }}">{{ car.id  }}</a></td><td>{{ car.name }}</td><td>{{ car.make }}</td></tr>
+                    	    {% endfor %}
+                	</tbody>
+		    </table>
                 </div>
         </div>
 </div>

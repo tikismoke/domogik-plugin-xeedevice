@@ -71,13 +71,14 @@ def get_car_list(client_id,client_secret,redirect_url):
                 error_string = str(error)
                 return error
             else :
-                return_car =""
-                for car in cars:
-                    car_id = str(car.id)
-                    car_name = car.name
-                    return_car += "CarId: " + car_id + " for car Name: " + car_name +"\n"
-                    cars_string = str(return_car)
-                    return cars_string
+                return cars
+#                return_car =""
+#                for car in cars:
+#                    car_id = str(car.id)
+#                    car_name = car.name
+#                    return_car += "CarId: " + car_id + " for car Name: " + car_name +"\n"
+#                    cars_string = str(return_car)
+#                return cars_string
     except:
         return "Error"
 
@@ -111,8 +112,8 @@ def get_position(client_id,client_secret,redirect_url):
                         redirect_uri = redirect_url)
         with open(xee_config_file, 'r') as xee_token_file:
             token = pickle.load(xee_token_file)
-#            locations ,error = xee.get_locations("14113",token.access_token,limit=100)
-            locations ,error = xee.get_locations("14113",token.access_token)
+            locations ,error = xee.get_locations("14113",token.access_token,limit=10)
+#            locations ,error = xee.get_locations("14113",token.access_token)
             if error != None:
                 error_string = str(error)
                 return error
@@ -129,12 +130,11 @@ def get_position(client_id,client_secret,redirect_url):
                     date = date[:19]
                     timestamp = time.mktime(datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S" ).timetuple())
                     position = str( lat + ":" + lon)
-                    return_location += str ("Lat: " + lat + " Lon: " + lon + " date: " + date + " timestamp: " + str(timestamp) + "\n")
+                    return_location += str ("Lat: " + lat + " Lon: " + lon + " date: " + date + " timestamp: " + str(timestamp) ) + "\n\r"
 #TODO get real sensor_id
 #                    pub.send_event('client.sensor', {"atTimestamp" : timestamp, sensor_id : position})
                     pub.send_event('client.sensor', {"atTimestamp" : timestamp, '1870' : position})
-                locations_string = str(return_location)
-                return locations_string
+                return return_location
     except:
         return "Error"    
 
@@ -182,6 +182,32 @@ def index(client_id):
             current_token = show_current_token(),
             errorlog = get_info_from_log(geterrorlogcmd),
 	    information = information)
+
+    except TemplateNotFound:
+        abort(404)
+
+@plugin_xeedevice_adm.route('/<client_id>/import', methods = ['GET', 'POST'])
+def mass_import(client_id):
+    detail = get_client_detail(client_id)
+    form = CodeForm()
+    xee_client_id = str(detail['data']['configuration'][1]['value'])
+    xee_client_secret = str(detail['data']['configuration'][2]['value'])
+    xee_redirect_url = str(detail['data']['configuration'][3]['value'])
+    mass_import_position = ''
+
+    if request.method == "POST":
+#        generate_token_file(form.code.data,xee_client_id,xee_client_secret,xee_redirect_url)
+	mass_import_position = get_position(xee_client_id,xee_client_secret,xee_redirect_url)
+#	information = get_xeecar_info(False)
+
+    try:
+        return render_template('import.html',
+            clientid = client_id,
+            client_detail = detail,
+            mactive = "clients",
+            active = 'advanced',
+            mass_import_position = mass_import_position,
+            form = form)
 
     except TemplateNotFound:
         abort(404)
