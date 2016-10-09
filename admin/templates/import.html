@@ -1,0 +1,19 @@
+{% extends theme("base/base.html") %}
+{% import theme("base/wtf.html") as wtf %}
+
+{% block content %}
+{% include theme("client_menu.html") %}
+
+<div class="container">
+    <div class="panel panel-default">
+                <div class="panel-body">
+                        <form method="POST">
+                            <button class="btn btn-info" type="submit">{% trans %}Do a mass import{% endtrans %}</button>
+			<p>{{ mass_import_position }}</p>
+                        </form>
+                </div>
+        </div>
+</div>
+
+
+{% endblock %}
