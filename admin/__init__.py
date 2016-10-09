@@ -15,6 +15,7 @@ import os
 import pickle
 import datetime
 import time
+#from domogik.common.utils import get_data_files_directory_for_plugin
 from flask_wtf import Form
 from wtforms import StringField
 
@@ -30,11 +31,17 @@ except ImportError:
 from xee import Xee
 import xee.entities as xee_entities
 
-from domogik.admin.application import app
-from domogikmq.pubsub.publisher import MQPub
-import zmq
+#TODO
+#from domogik_packages.plugin_xeedevice.bin.xeedevice import TOKEN_SAV
+#import domogik_packages.plugin_xeedevice.bin.xeedevice as xeedevice
+#from domogik.common.plugin import Plugin
+#from domogikmq.message import MQMessage
+#import zmq
 
-from domogik_packages.plugin_xeedevice.admin.views.tools import get_xeecar_info
+from domogikmq.reqrep.client import MQSyncReq
+from domogikmq.message import MQMessage
+from domogik.admin.application import app
+from domogik.common.utils import get_sanitized_hostname
 
 ### package specific functions
 
@@ -113,28 +120,33 @@ def get_position(client_id,client_secret,redirect_url):
         with open(xee_config_file, 'r') as xee_token_file:
             token = pickle.load(xee_token_file)
             locations ,error = xee.get_locations("14113",token.access_token,limit=10)
-#            locations ,error = xee.get_locations("14113",token.access_token)
             if error != None:
                 error_string = str(error)
                 return error
             else :
                 return_location =""
                 data = {}
-                print ("LOCATION get")
-                pub = MQPub(app.zmq_context, 'admin')
+                cli = MQSyncReq(app.zmq_context)
+                msg = MQMessage()
                 for location in locations:
-                    print (location)
                     lat = str(location.latitude)
                     lon = str(location.longitude)
                     date = str(location.date)
                     date = date[:19]
                     timestamp = time.mktime(datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S" ).timetuple())
                     position = str( lat + ":" + lon)
-                    return_location += str ("Lat: " + lat + " Lon: " + lon + " date: " + date + " timestamp: " + str(timestamp) ) + "\n\r"
-#TODO get real sensor_id
-#                    pub.send_event('client.sensor', {"atTimestamp" : timestamp, sensor_id : position})
-                    pub.send_event('client.sensor', {"atTimestamp" : timestamp, '1870' : position})
-                return return_location
+                    return_location += str ("Lat: " + lat + " Lon: " + lon + " date: " + date + " timestamp: " + str(timestamp) + "\n")
+                    msg.set_action('client.sensor')
+                    msg.add_data('sensor_id', 1841)
+                    msg.add_data('value', position)
+                    msg.add_data('atTimestamp', timestamp)
+                    print (msg.get())
+                    print (cli.request('xplgw', msg.get(), timeout=10))
+#			data['1830'] = position
+#			data['atTimestamp'] = timestamp
+#			Plugin._pub.send_event('client.sensor', data)
+                locations_string = str(return_location)
+                return locations_string
     except:
         return "Error"    
 
@@ -168,8 +180,7 @@ def index(client_id):
 
     if request.method == "POST":
         generate_token_file(form.code.data,xee_client_id,xee_client_secret,xee_redirect_url)
-#	information = get_position(xee_client_id,xee_client_secret,xee_redirect_url)
-#	information = get_xeecar_info(False)
+	information = get_position(xee_client_id,xee_client_secret,xee_redirect_url)
     try:
         return render_template('plugin_xeedevice.html',
             clientid = client_id,
@@ -196,9 +207,7 @@ def mass_import(client_id):
     mass_import_position = ''
 
     if request.method == "POST":
-#        generate_token_file(form.code.data,xee_client_id,xee_client_secret,xee_redirect_url)
 	mass_import_position = get_position(xee_client_id,xee_client_secret,xee_redirect_url)
-#	information = get_xeecar_info(False)
 
     try:
         return render_template('import.html',
