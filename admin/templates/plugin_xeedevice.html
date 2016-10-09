@@ -6,69 +6,83 @@
 
 <div class="container">
     <div class="panel panel-default">
-                <div class="panel-body">
-		    <li><a href="./{{ clientid }}/import">{% trans %}Mass import data{% endtrans %}</a></li>
-                </div>
+        <div class="panel-body">
+            <li><a href="./{{ clientid }}/import">{% trans %}Mass import data{% endtrans %}</a></li>
         </div>
+    </div>
 </div>
 
 
 <div class="container">
     <div class="panel panel-default">
-                <div class="panel-heading"><h4>{% trans %}Generating a Code for Token{% endtrans %}</h4></div>
-                <div class="panel-body">
-                        <p>{% trans %}Open this link into a new navigation window, filll you Xee user account and give you authorisation to use it:{% endtrans %}</p>
-                        <pre>{{ get_token_url }}</pre>
-                        <a target="_blank" href="{{ get_token_url }}" class="btn btn-defautl"> Open this link in a new window to get your code!</a>
-                        <p></p>
-                        <p>{% trans %}This will return you to a new blank page (maybe an error page) but it contain the code in the url address.{% endtrans %}</p>
-    	                <p>{% trans %}Put the code visible at http://localhost/?code= here to generate and save a token file in data.{% endtrans %}</p>
-                        <form method="POST">
-                            <div class="form-group">
-				<label for="usr">Code:</label>
-				<input type="text" class="form-control" id= {{form.code}}
-                            </div>
-                            <button class="btn btn-info" type="submit">{% trans %}Generate token file{% endtrans %}</button>
-                        <p>{% trans %}You will need to restart plugin after generating the token file.{% endtrans %}</p>
-                        </form>
+        <div class="panel-heading"><h4>{% trans %}Generating a Code for Token{% endtrans %}</h4></div>
+        <div class="panel-body">
+            <p>{% trans %}Open this link into a new navigation window, filll you Xee user account and give you
+                authorisation to use it:{% endtrans %}</p>
+            <pre>{{ get_token_url }}</pre>
+            <a target="_blank" href="{{ get_token_url }}" class="btn btn-defautl"> Open this link in a new window to get
+                your code!</a>
+            <p></p>
+            <p>{% trans %}This will return you to a new blank page (maybe an error page) but it contain the code in the
+                url address.{% endtrans %}</p>
+            <p>{% trans %}Put the code visible at http://localhost/?code= here to generate and save a token file in
+                data.{% endtrans %}</p>
+            <form method="POST">
+                <div class="form-group">
+                    <label for="usr">Code:</label>
+                    <input type="text" class="form-control" id={{form.code}}>
                 </div>
+                <button class="btn btn-info" type="submit">{% trans %}Generate token file{% endtrans %}</button>
+                <p>{% trans %}You will need to restart plugin after generating the token file.{% endtrans %}</p>
+            </form>
         </div>
+    </div>
 </div>
 
 <div class="container">
     <div class="panel panel-default">
-                <div class="panel-heading"><h4>{% trans %}List of available CarId in this xee account{% endtrans %}</h4></div>
-                <div class="panel-body">
-		    <table class='table'>
-            	        <thead>
-        	            <tr><th>{% trans %}Car Id  (Clic to create device){% endtrans %}</th><th>{% trans %}Car name{% endtrans %}</th><th>{% trans %}Make{% endtrans %}</th></tr>
-    	                </thead>
-	                <tbody>
-	                    {% for car in car_id %}
-                        	<tr><td><a href="/client/{{ clientid }}/dmg_devices/new/type/xee.car.status?name={{ car.name }}&carid={{ car.id }}">{{ car.id  }}</a></td><td>{{ car.name }}</td><td>{{ car.make }}</td></tr>
-                    	    {% endfor %}
-                	</tbody>
-		    </table>
-                </div>
+        <div class="panel-heading"><h4>{% trans %}List of available CarId in this xee account{% endtrans %}</h4></div>
+        <div class="panel-body">
+            <table class='table'>
+                <thead>
+                <tr>
+                    <th>{% trans %}Car Id (Clic to create device){% endtrans %}</th>
+                    <th>{% trans %}Car name{% endtrans %}</th>
+                    <th>{% trans %}Make{% endtrans %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for car in car_id %}
+                <tr>
+                    <td>
+                        <a href="/client/{{ clientid }}/dmg_devices/new/type/xee.car.status?name={{ car.name }}&carid={{ car.id }}">{{
+                            car.id }}</a></td>
+                    <td>{{ car.name }}</td>
+                    <td>{{ car.make }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
+    </div>
 </div>
 
 <div class="container">
     <div class="panel panel-default">
-                <div class="panel-heading"><h4>{% trans %}Current Token information{% endtrans %}</h4></div>
-                <div class="panel-body">
-                        <pre>{{ current_token }}</pre>
-                </div>
+        <div class="panel-heading"><h4>{% trans %}Current Token information{% endtrans %}</h4></div>
+        <div class="panel-body">
+            <pre>{{ current_token }}</pre>
         </div>
+    </div>
 </div>
 
 
 <div class="container">
     <div class="panel panel-default">
-                <div class="panel-heading"><h4>{% trans %}Last errors in plugin log{% endtrans %}</h4></div>
-                <div class="panel-body">
-                        <pre>{{ errorlog }}</pre>
-                </div>
+        <div class="panel-heading"><h4>{% trans %}Last errors in plugin log{% endtrans %}</h4></div>
+        <div class="panel-body">
+            <pre>{{ errorlog }}</pre>
         </div>
+    </div>
 </div>
 {% endblock %}

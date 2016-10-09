@@ -129,13 +129,16 @@ class xeeManager(Plugin):
         """
         self.log.debug(u"send_data : '%s' for sensor '%s' for device_id: '%s' " % (value, sensor_name, device_id))
         sensor_id = self.sensors[device_id][sensor_name]
-        data = {sensor_id : value, 'atTimestamp' : attimestamp}
+        data = {sensor_id: value, 'atTimestamp': attimestamp}
         try:
             self._pub.send_event('client.sensor', data)
             return True, None
         except:
-            self.log.debug(u"Error while sending sensor MQ message for sensor values : {0}".format(traceback.format_exc()))
-            return False, u"Error while sending sensor MQ message for sensor values : {0}".format(traceback.format_exc())
+            self.log.debug(
+                u"Error while sending sensor MQ message for sensor values : {0}".format(traceback.format_exc()))
+            return False, u"Error while sending sensor MQ message for sensor values : {0}".format(
+                traceback.format_exc())
+
 
 if __name__ == "__main__":
     xeeManager()

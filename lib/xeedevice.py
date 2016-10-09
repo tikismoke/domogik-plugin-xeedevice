@@ -48,6 +48,7 @@ import time
 import datetime
 import calendar
 
+
 class xeeException(Exception):
     """
     XEE exception
@@ -191,21 +192,21 @@ class XEEclass:
                     if sensor['device_type'] == "xee.car":
                         val = self.readXeeApiCar(sensor['sensor_carid'])
                         if val != "failed":
-# TODO to remove send
-#                            name = u''
-#                            make = u''
-#                            carid = u''
-#                            for sensor in val:
-#				print sensor
-#                                if sensor.name == "name":
-#                                    name = sensor.value
-##	                            send_sensor(sensor['device_id'],'name', name)
-#                                elif sensor.name == "make":
-#                                    make = sensor.value
-#	                            send_sensor(sensor['device_id'],'make', make)
-#                                elif sensor.name == "id":
-#                                    carid = sensor.value
-#	                            send_sensor(sensor['device_id'],'carid', carid)
+                            # TODO to remove send
+                            #                            name = u''
+                            #                            make = u''
+                            #                            carid = u''
+                            #                            for sensor in val:
+                            #				print sensor
+                            #                                if sensor.name == "name":
+                            #                                    name = sensor.value
+                            ##	                            send_sensor(sensor['device_id'],'name', name)
+                            #                                elif sensor.name == "make":
+                            #                                    make = sensor.value
+                            #	                            send_sensor(sensor['device_id'],'make', make)
+                            #                                elif sensor.name == "id":
+                            #                                    carid = sensor.value
+                            #	                            send_sensor(sensor['device_id'],'carid', carid)
                             send(sensor['device_id'], {'name': val.name, 'make': val.make, 'carid': val.id})
                     elif sensor['device_type'] == "xee.car.status":
                         val = self.readXeeApiStatus(sensor['sensor_carid'])
@@ -238,7 +239,7 @@ class XEEclass:
                             position = str(val.location.latitude) + "," + str(val.location.longitude)
                             if position != u'':
                                 timestamp = calendar.timegm(val.location.date.timetuple())
-                                send_sensor(sensor['device_id'],'position', position, timestamp)
+                                send_sensor(sensor['device_id'], 'position', position, timestamp)
                         self._log.debug(u"=> '{0}' : wait for {1} seconds".format(sensor['device_name'], self.period))
             except:
                 self._log.error(u"# Loop_read_sensors EXCEPTION")

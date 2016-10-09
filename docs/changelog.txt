@@ -6,5 +6,4 @@ Changelog
 ===
 
 * Plugin creation
-* Todo add advanced page for getting aouth code from xee.com
 * Todo add device autodiscovering.
