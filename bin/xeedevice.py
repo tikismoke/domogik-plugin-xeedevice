@@ -63,7 +63,9 @@ class xeeManager(Plugin):
         redirect_url = str(self.get_config('redirect_url'))
         period = int(self.get_config('period'))
 
-        # ### get the devices list
+	pathData = str(self.get_data_files_directory()) # force str type for path data
+        
+	# ### get the devices list
         # for this plugin, if no devices are created we won't be able to use devices.
         self.devices = self.get_device_list(quit_if_no_device=False)
         self.log.info(u"==> device:   %s" % format(self.devices))
@@ -74,7 +76,7 @@ class xeeManager(Plugin):
 
         # ### Open the XEE lib
         try:
-            self.XEEclass = XEEclass(self.log, client_id, client_secret, redirect_url, period)
+            self.XEEclass = XEEclass(self.log, client_id, client_secret, redirect_url, period, dataPath = pathData)
         except xeeException as e:
             self.log.error(e.value)
             self.force_leave()

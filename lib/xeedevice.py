@@ -48,7 +48,6 @@ import time
 import datetime
 import calendar
 
-
 class xeeException(Exception):
     """
     XEE exception
@@ -68,7 +67,7 @@ class XEEclass:
     """
 
     # -------------------------------------------------------------------------------------------------
-    def __init__(self, log, client_id, client_secret, redirect_url, period):
+    def __init__(self, log, client_id, client_secret, redirect_url, period, dataPath):
         try:
             """
             Create a xee instance, allowing to use XEE api
@@ -79,10 +78,23 @@ class XEEclass:
             self.redirect_url = redirect_url
             self.period = period
             self._sensors = []
+	    self._dataPath = dataPath
             self.xee = Xee(client_id=self.client_id,
                            client_secret=self.client_secret,
                            redirect_uri=self.redirect_url)
             login_url = self.xee.get_authentication_url() + "&redirect_uri=" + self.redirect_url
+            if not os.path.exists(self._dataPath) :
+                self._log.info(u"Directory data not exist, trying create : %s" , self._dataPath)
+                try :
+                    os.mkdir(self._dataPath)
+                    self._log.info(u"Xee data directory created : %s"  %self._dataPath)
+                except Exception as e:
+                    self._log.error(e.message)
+                    raise xeeException ("Xee data directory not exist : %s" % self._dataPath)
+	    if not os.access(self._dataPath, os.W_OK) :
+                self._log.error("User %s haven't write access on data directory : %s"  %(user,  self._dataPath))
+    	        raise xeeException ("User %s haven't write access on data directory : %s"  %(user,  self._dataPath))
+
             self.xee_config_file = os.path.join(os.path.dirname(__file__), '../data/xee_token.sav')
             self.open_token(self.xee)
 
@@ -122,7 +134,7 @@ class XEEclass:
                 if error != None:
                     self._log.warning(u"Error getting user, try refreshing with token_refresh from file")
                     self._log.warning(error)
-                    self.token, error = xee.get_token_from_refresh_token(self.token.refresh_token)
+                    self.token, error = self.xee.get_token_from_refresh_token(self.token.refresh_token)
                     if error != None:
                         self._log.error(u"Error getting user, from refresh token")
                         self._log.error(error)
@@ -158,6 +170,7 @@ class XEEclass:
                 return car
             else:
                 self._log.debug(error)
+                self.open_token(self.xee)
                 return "failed"
         except AttributeError:
             self.open_token()
@@ -177,6 +190,7 @@ class XEEclass:
             else:
                 self._log.debug(error)
                 return "failed"
+                self.open_token(self.xee)
         except AttributeError:
             self.open_token()
             self._log.error(u"### Car Id '%s', ERROR while reading car status." % carid)
