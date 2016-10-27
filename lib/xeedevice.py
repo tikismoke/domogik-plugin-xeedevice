@@ -100,29 +100,7 @@ class XEEclass:
 
         except ValueError:
             self._log.error(u"error reading Xee.")
-            try:
-                with open(xee_config_file, 'r') as xee_token_file:
-                    self._log.debug(u"Opening File")
-                    self.token = pickle.load(xee_token_file)
-                    self._log.debug(u"Getting user")
-                    user, error = self.xee.get_user(self.token.access_token)
-                    if error != None:
-                        self._log.warning(u"Error getting user, try refreshing with token_refresh from file")
-                        self._log.warning(error)
-                        self.token, error = self.xee.get_token_from_refresh_token(self.token.refresh_token)
-                        if error != None:
-                            self._log.error(u"Error getting user, from refresh token")
-                            self._log.error(error)
-                            sys.exit("refreshing token failed from refresh_token")
-                            # TODO stop plugin
-                        else:
-                            self._log.warning(u"Token succesfully refresh with token_refresh from file")
-                with open(xee_config_file, 'w') as xee_token_file:
-                    pickle.dump(self.token, xee_token_file)
-
-            except ValueError:
-                self._log.error(u"error reading Xee.")
-                return
+            return
 
     def open_token(self, xee):
         try:
