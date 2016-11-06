@@ -56,7 +56,7 @@ def generate_token_file(authorization_code, xee_client_id, xee_client_secret, xe
               redirect_uri=xee_redirect_url)
     token, error = xee.get_token_from_code(authorization_code)
     if error != None:
-        flash(gettext(u"Error while getting token from Xee code check you client id/secret redirect url or code"),
+        flash(gettext(u"Error while getting token from Xee code, check you client id/secret redirect url or code"),
               "error")
     else:
         with open(xee_config_file, 'w') as xee_token_file:
@@ -73,17 +73,10 @@ def get_car_list(client_id, client_secret, redirect_url):
             token = pickle.load(xee_token_file)
             cars, error = xee.get_cars(token.access_token)
             if error != None:
-                error_string = str(error)
+                flash(gettext(u"Error while getting car list from Xee, check your token"), "error")
                 return error
             else:
                 return cars
-            #                return_car =""
-            #                for car in cars:
-            #                    car_id = str(car.id)
-            #                    car_name = car.name
-            #                    return_car += "CarId: " + car_id + " for car Name: " + car_name +"\n"
-            #                    cars_string = str(return_car)
-            #                return cars_string
     except:
         return "Error"
 
