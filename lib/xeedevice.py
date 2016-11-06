@@ -48,6 +48,7 @@ import time
 import datetime
 import calendar
 
+
 class xeeException(Exception):
     """
     XEE exception
@@ -78,22 +79,21 @@ class XEEclass:
             self.redirect_url = redirect_url
             self.period = period
             self._sensors = []
-	    self._dataPath = dataPath
+            self._dataPath = dataPath
             self.xee = Xee(client_id=self.client_id,
                            client_secret=self.client_secret,
                            redirect_uri=self.redirect_url)
-            login_url = self.xee.get_authentication_url() + "&redirect_uri=" + self.redirect_url
-            if not os.path.exists(self._dataPath) :
-                self._log.info(u"Directory data not exist, trying create : %s" , self._dataPath)
-                try :
+            if not os.path.exists(self._dataPath):
+                self._log.info(u"Directory data not exist, trying create : %s", self._dataPath)
+                try:
                     os.mkdir(self._dataPath)
-                    self._log.info(u"Xee data directory created : %s"  %self._dataPath)
+                    self._log.info(u"Xee data directory created : %s" % self._dataPath)
                 except Exception as e:
                     self._log.error(e.message)
-                    raise xeeException ("Xee data directory not exist : %s" % self._dataPath)
-	    if not os.access(self._dataPath, os.W_OK) :
-                self._log.error("User %s haven't write access on data directory : %s"  %(user,  self._dataPath))
-    	        raise xeeException ("User %s haven't write access on data directory : %s"  %(user,  self._dataPath))
+                    raise xeeException("Xee data directory not exist : %s" % self._dataPath)
+            if not os.access(self._dataPath, os.W_OK):
+                self._log.error("User %s haven't write access on data directory : %s" % (user, self._dataPath))
+                raise xeeException("User %s haven't write access on data directory : %s" % (user, self._dataPath))
 
             self.xee_config_file = os.path.join(os.path.dirname(__file__), '../data/xee_token.sav')
             self.open_token(self.xee)
@@ -151,7 +151,7 @@ class XEEclass:
                 self.open_token(self.xee)
                 return "failed"
         except AttributeError:
-            self.open_token()
+            self.open_token(self.xee)
             self._log.error(u"### Car Id '%s', ERROR while reading car." % carid)
             return "failed"
 
@@ -170,12 +170,12 @@ class XEEclass:
                 return "failed"
                 self.open_token(self.xee)
         except AttributeError:
-            self.open_token()
+            self.open_token(self.xee)
             self._log.error(u"### Car Id '%s', ERROR while reading car status." % carid)
             return "failed"
 
     # -------------------------------------------------------------------------------------------------
-    def loop_read_sensor(self, send, send_sensor, stop):
+    def loop_read_sensor(self, send_sensor, stop):
         """
         """
         while not stop.isSet():
@@ -184,22 +184,9 @@ class XEEclass:
                     if sensor['device_type'] == "xee.car":
                         val = self.readXeeApiCar(sensor['sensor_carid'])
                         if val != "failed":
-                            # TODO to remove send
-                            #                            name = u''
-                            #                            make = u''
-                            #                            carid = u''
-                            #                            for sensor in val:
-                            #				print sensor
-                            #                                if sensor.name == "name":
-                            #                                    name = sensor.value
-                            ##	                            send_sensor(sensor['device_id'],'name', name)
-                            #                                elif sensor.name == "make":
-                            #                                    make = sensor.value
-                            #	                            send_sensor(sensor['device_id'],'make', make)
-                            #                                elif sensor.name == "id":
-                            #                                    carid = sensor.value
-                            #	                            send_sensor(sensor['device_id'],'carid', carid)
-                            send(sensor['device_id'], {'name': val.name, 'make': val.make, 'carid': val.id})
+                            send_sensor(sensor['device_id'], 'name', val.name, None)
+                            send_sensor(sensor['device_id'], 'make', val.make, None)
+                            send_sensor(sensor['device_id'], 'carid', val.id, None)
                     elif sensor['device_type'] == "xee.car.status":
                         val = self.readXeeApiStatus(sensor['sensor_carid'])
                         if val != "failed":
@@ -232,7 +219,7 @@ class XEEclass:
                             if position != u'':
                                 timestamp = calendar.timegm(val.location.date.timetuple())
                                 send_sensor(sensor['device_id'], 'position', position, timestamp)
-                        self._log.debug(u"=> '{0}' : wait for {1} seconds".format(sensor['device_name'], self.period))
+                    self._log.debug(u"=> '{0}' : wait for {1} seconds".format(sensor['device_name'], self.period))
             except:
                 self._log.error(u"# Loop_read_sensors EXCEPTION")
                 pass
