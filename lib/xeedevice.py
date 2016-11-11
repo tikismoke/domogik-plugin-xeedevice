@@ -237,6 +237,12 @@ class XEEclass:
                                     sensor_name = "lock_status"
                                 elif sensors.name == "IgnitionSts":
                                     sensor_name = "ignition_status"
+				    if sensors.value==u'1':
+					self.period=30
+					self._log.debug(u"moteur on")
+				    else :
+					self.period=180
+					self._log.debug(u"moteur off")
                                 elif sensors.name == "HeadLightSts":
                                     sensor_name = "headlight_status"
                                 elif sensors.name == "HighBeamSts":
