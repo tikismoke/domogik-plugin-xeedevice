@@ -47,7 +47,7 @@ import locale
 import time
 import datetime
 import calendar
-
+import pytz
 
 class xeeException(Exception):
     """
@@ -143,36 +143,64 @@ class XEEclass:
         """
         try:
             car, error = self.xee.get_car(int(carid), self.token.access_token)
-            if error == None:
-                self._log.debug(car)
-                return car
-            else:
+            if error != None:
                 self._log.debug(error)
                 self.open_token(self.xee)
                 return "failed"
-        except AttributeError:
-            self.open_token(self.xee)
+            else:
+#                self._log.debug(car)
+                return car
+	except AttributeError:
             self._log.error(u"### Car Id '%s', ERROR while reading car." % carid)
-            return "failed"
+        except :
+            self._log.error(u"Xee Exception : {0}".format(traceback.format_exc()))
+#        finally :
+            self.open_token(self.xee)
+#            return "failed"
 
     # -------------------------------------------------------------------------------------------------
-    def readXeeApiStatus(self, carid):
+    def readXeeApiSignals(self, carid, begindate):
         """
         read the xee api status information
         """
         try:
-            carstatus, error = self.xee.get_status(int(carid), self.token.access_token)
-            if error == None:
-                self._log.debug(carstatus)
-                return carstatus
-            else:
+            carsignals, error = self.xee.get_signals(int(carid), self.token.access_token, begin=begindate)
+            if error != None:
+                self.open_token(self.xee)
                 self._log.debug(error)
                 return "failed"
-                self.open_token(self.xee)
-        except AttributeError:
-            self.open_token(self.xee)
+            else:
+                self._log.debug(carsignals)
+                return carsignals
+	except AttributeError:
             self._log.error(u"### Car Id '%s', ERROR while reading car status." % carid)
-            return "failed"
+        except :
+	    self._log.error(u"Xee Exception : {0}".format(traceback.format_exc()))
+#	finally :
+            self.open_token(self.xee)
+#            return "failed"
+
+    # -------------------------------------------------------------------------------------------------
+    def readXeeApiPosition(self, carid, begindate):
+        """
+        read the xee api status information
+        """
+        try:
+            position, error = self.xee.get_locations(int(carid), self.token.access_token, begin=begindate)
+            if error != None:
+                self.open_token(self.xee)
+                self._log.debug(error)
+                return "failed"
+            else:
+#                self._log.debug(position)
+                return position
+	except AttributeError:
+            self._log.error(u"### Car Id '%s', ERROR while reading car status." % carid)
+        except :
+	    self._log.error(u"Xee Exception : {0}".format(traceback.format_exc()))
+#	finally :
+            self.open_token(self.xee)
+#            return "failed"
 
     # -------------------------------------------------------------------------------------------------
     def loop_read_sensor(self, send_sensor, stop):
@@ -188,11 +216,14 @@ class XEEclass:
                             send_sensor(sensor['device_id'], 'make', val.make, None)
                             send_sensor(sensor['device_id'], 'carid', val.id, None)
                     elif sensor['device_type'] == "xee.car.status":
-                        val = self.readXeeApiStatus(sensor['sensor_carid'])
-                        if val != "failed":
-                            self._log.debug(val.signals)
+			now = datetime.datetime.now(pytz.utc)
+			today = datetime.datetime(now.year, now.month, now.day, now.hour, now.minute, now.second, tzinfo=pytz.utc)
+			begin = today - datetime.timedelta(seconds=self.period)
+                        val = self.readXeeApiSignals(sensor['sensor_carid'], begin)
+                        if val != None:
+                            self._log.debug(val)
                             position = u''
-                            for sensors in val.signals:
+                            for sensors in val:
                                 sensor_name = u''
                                 if sensors.name == "VehiculeSpeed":
                                     sensor_name = "speed"
@@ -215,12 +246,19 @@ class XEEclass:
                                 if sensor_name != u'':
                                     timestamp = calendar.timegm(sensors.date.timetuple())
                                     send_sensor(sensor['device_id'], sensor_name, sensors.value, timestamp)
-                            position = str(val.location.latitude) + "," + str(val.location.longitude)
-                            if position != u'':
-                                timestamp = calendar.timegm(val.location.date.timetuple())
-                                send_sensor(sensor['device_id'], 'position', position, timestamp)
+#			    position = str(val.location.latitude) + "," + str(val.location.longitude)
+#                            if position != u'':
+#                                timestamp = calendar.timegm(val.location.date.timetuple())
+#                                send_sensor(sensor['device_id'], 'position', position, timestamp)
+			val = self.readXeeApiPosition(sensor['sensor_carid'], begin)
+			if val != "failed":
+                            for locations in val:
+				position = str(locations.latitude) + "," + str(locations.longitude)
+	                        if position != u'':
+    		                    timestamp = calendar.timegm(locations.date.timetuple())
+                            	    send_sensor(sensor['device_id'], 'position', position, timestamp)
                     self._log.debug(u"=> '{0}' : wait for {1} seconds".format(sensor['device_name'], self.period))
-            except:
-                self._log.error(u"# Loop_read_sensors EXCEPTION")
+            except Exception, e :
+		self._log.error(u"# Loop_read_sensors EXCEPTION: {0}".format(traceback.format_exc())) 
                 pass
             stop.wait(self.period)
