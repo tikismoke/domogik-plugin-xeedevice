@@ -73,37 +73,9 @@
                 "round_value": 0
 	    }
 	},
-	"position": {
-	    "name": "Position",
+	"location": {
+	    "name": "Location",
 	    "data_type": "DT_CoordD",
-	    "conversion": "",
-	    "incremental": false,
-	    "timeout": 0,
-	    "history": {
-		"store": true,
-		"duplicate": false,
-                "max": 0,
-                "expire": 0,
-                "round_value": 0
-	    }
-	},
-	"speed": {
-	    "name": "Speed",
-	    "data_type": "DT_kmhSpeed",
-	    "conversion": "",
-	    "incremental": false,
-	    "timeout": 0,
-	    "history": {
-		"store": true,
-		"duplicate": false,
-                "max": 0,
-                "expire": 0,
-                "round_value": 0
-	    }
-	},
-	"odometer": {
-	    "name": "Odometer",
-	    "data_type": "DT_kMeter",
 	    "conversion": "",
 	    "incremental": false,
 	    "timeout": 0,
@@ -129,9 +101,149 @@
                 "round_value": 0
 	    }
 	},
+	"front_fog_light_status": {
+	    "name": "Fog Lights",
+	    "data_type": "DT_Switch",
+	    "conversion": "",
+	    "incremental": false,
+	    "timeout": 0,
+	    "history": {
+		"store": true,
+		"duplicate": false,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+	    }
+	},
+	"rear_fog_light_status": {
+	    "name": "Rear Fog Lights",
+	    "data_type": "DT_Switch",
+	    "conversion": "",
+	    "incremental": false,
+	    "timeout": 0,
+	    "history": {
+		"store": true,
+		"duplicate": false,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+	    }
+	},
+	"hazard_status": {
+	    "name": "Hazard Lights",
+	    "data_type": "DT_Switch",
+	    "conversion": "",
+	    "incremental": false,
+	    "timeout": 0,
+	    "history": {
+		"store": true,
+		"duplicate": false,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+	    }
+	},
+	"head_light_status": {
+	    "name": "HeadLights",
+	    "data_type": "DT_Switch",
+	    "conversion": "",
+	    "incremental": false,
+	    "timeout": 0,
+	    "history": {
+		"store": true,
+		"duplicate": false,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+	    }
+	},
+	"high_beam_status": {
+	    "name": "High Beams",
+	    "data_type": "DT_Switch",
+	    "conversion": "",
+	    "incremental": false,
+	    "timeout": 0,
+	    "history": {
+		"store": true,
+		"duplicate": false,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+	    }
+	},
+	"low_beam_status": {
+	    "name": "Low Beams",
+	    "data_type": "DT_Switch",
+	    "conversion": "",
+	    "incremental": false,
+	    "timeout": 0,
+	    "history": {
+		"store": true,
+		"duplicate": false,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+	    }
+	},
+	"left_indicator_status": {
+	    "name": "Left Indicator",
+	    "data_type": "DT_Switch",
+	    "conversion": "",
+	    "incremental": false,
+	    "timeout": 0,
+	    "history": {
+		"store": true,
+		"duplicate": false,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+	    }
+	},
+	"right_indicator_status": {
+	    "name": "Right Indicator",
+	    "data_type": "DT_Switch",
+	    "conversion": "",
+	    "incremental": false,
+	    "timeout": 0,
+	    "history": {
+		"store": true,
+		"duplicate": false,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+	    }
+	},
 	"fuel_level": {
 	    "name": "Fuel Level",
 	    "data_type": "DT_VolumeLiter",
+	    "conversion": "",
+	    "incremental": false,
+	    "timeout": 0,
+	    "history": {
+		"store": true,
+		"duplicate": false,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+	    }
+	},
+	"ignition_status": {
+	    "name": "Ignition",
+	    "data_type": "DT_Switch",
+	    "conversion": "",
+	    "incremental": false,
+	    "timeout": 0,
+	    "history": {
+		"store": true,
+		"duplicate": false,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+	    }
+	},
+	"odometer": {
+	    "name": "Odometer",
+	    "data_type": "DT_kMeter",
 	    "conversion": "",
 	    "incremental": false,
 	    "timeout": 0,
@@ -157,8 +269,8 @@
                 "round_value": 0
 	    }
 	},
-	"ignition_status": {
-	    "name": "Ignition Status",
+	"intermittent_wiper_status": {
+	    "name": "Front Wippers (Intermittent)",
 	    "data_type": "DT_Switch",
 	    "conversion": "",
 	    "incremental": false,
@@ -171,8 +283,8 @@
                 "round_value": 0
 	    }
 	},
-	"headlight_status": {
-	    "name": "Head Light Status",
+	"manual_wiper_status": {
+	    "name": "Front Wippers (Manual)",
 	    "data_type": "DT_Switch",
 	    "conversion": "",
 	    "incremental": false,
@@ -185,8 +297,8 @@
                 "round_value": 0
 	    }
 	},
-	"highbeam_status": {
-	    "name": "High Beam Status",
+	"low_speed_wiper_status": {
+	    "name": "Front Wippers (Low Speed)",
 	    "data_type": "DT_Switch",
 	    "conversion": "",
 	    "incremental": false,
@@ -199,9 +311,79 @@
                 "round_value": 0
 	    }
 	},
-	"lowbeam_status": {
-	    "name": "Low Beam Status",
+	"high_speed_wiper_status": {
+	    "name": "Front Wippers (High Speed)",
 	    "data_type": "DT_Switch",
+	    "conversion": "",
+	    "incremental": false,
+	    "timeout": 0,
+	    "history": {
+		"store": true,
+		"duplicate": false,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+	    }
+	},
+	"auto_rear_wiper_status": {
+	    "name": "Auto Rear Wippers",
+	    "data_type": "DT_Switch",
+	    "conversion": "",
+	    "incremental": false,
+	    "timeout": 0,
+	    "history": {
+		"store": true,
+		"duplicate": false,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+	    }
+	},
+	"manual_rear_wiper_status": {
+	    "name": "Manual rear Wipers",
+	    "data_type": "DT_Switch",
+	    "conversion": "",
+	    "incremental": false,
+	    "timeout": 0,
+	    "history": {
+		"store": true,
+		"duplicate": false,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+	    }
+	},
+	"engine_speed": {
+	    "name": "Engine Speed",
+	    "data_type": "DT_Number",
+	    "conversion": "",
+	    "incremental": false,
+	    "timeout": 0,
+	    "history": {
+		"store": true,
+		"duplicate": false,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+	    }
+	},
+	"vehicle_speed": {
+	    "name": "Vehicle Speed",
+	    "data_type": "DT_kmhSpeed",
+	    "conversion": "",
+	    "incremental": false,
+	    "timeout": 0,
+	    "history": {
+		"store": true,
+		"duplicate": false,
+                "max": 0,
+                "expire": 0,
+                "round_value": 0
+	    }
+	},
+	"computed_fuel_level": {
+	    "name": "Computed Fuel Level ",
+	    "data_type": "DT_VolumeLiter",
 	    "conversion": "",
 	    "incremental": false,
 	    "timeout": 0,
@@ -216,10 +398,10 @@
     },
     "xpl_stats": {},
     "device_types": {
-	"xee.car": {
-	    "id": "xee.car",
-	    "description": "Xee Car",
-	    "name": "Xee car",
+	"xee.information": {
+	    "id": "xee.information",
+	    "description": "Car Information",
+	    "name": "Xee car information",
 	    "commands": [],
 	    "sensors": ["name", "carid", "make"],
 	    "parameters": [{
@@ -229,12 +411,51 @@
 		"type": "integer"
 	    }]
 	},
-	"xee.car.status": {
-	    "id": "xee.car.status",
-	    "description": "Xee Car status",
+	"xee.location": {
+	    "id": "xee.location",
+	    "description": "Car Location",
+	    "name": "Xee car location",
+	    "commands": [],
+	    "sensors": ["location"],
+	    "parameters": [{
+		"key": "carid",
+		"xpl": false,
+		"description": "carid of the car",
+		"type": "integer"
+	    }]
+	},
+	"xee.status": {
+	    "id": "xee.status",
+	    "description": "Car Status",
 	    "name": "Xee car status",
 	    "commands": [],
-	    "sensors": ["position", "speed", "odometer", "battery_voltage", "fuel_level", "lock_status", "ignition_status", "headlight_status", "highbeam_status", "lowbeam_status"],
+	    "sensors": ["battery_voltage", "fuel_level", "ignition_status", "odometer", "lock_status", "engine_speed", "vehicle_speed", "computed_fuel_level"],
+	    "parameters": [{
+		"key": "carid",
+		"xpl": false,
+		"description": "carid of the car",
+		"type": "integer"
+	    }]
+	},
+	"xee.lights": {
+	    "id": "xee.lights",
+	    "description": "Lights Status",
+	    "name": "Xee car lights",
+	    "commands": [],
+	    "sensors": ["front_fog_light_status", "rear_fog_light_status", "hazard_status", "head_light_status", "high_beam_status", "low_beam_status", "left_indicator_status", "right_indicator_status"],
+	    "parameters": [{
+		"key": "carid",
+		"xpl": false,
+		"description": "carid of the car",
+		"type": "integer"
+	    }]
+	},
+	"xee.wippers": {
+	    "id": "xee.wippers",
+	    "description": "Wippers Status",
+	    "name": "Xee car wippers",
+	    "commands": [],
+	    "sensors": ["intermittent_wiper_status", "manual_wiper_status", "low_speed_wiper_status", "high_speed_wiper_status", "auto_rear_wiper_status", "manual_rear_wiper_status"],
 	    "parameters": [{
 		"key": "carid",
 		"xpl": false,
