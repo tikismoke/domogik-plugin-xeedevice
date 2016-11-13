@@ -171,7 +171,7 @@ class XEEclass:
                 self._log.debug(error)
                 return "failed"
             else:
-                self._log.debug(carsignals)
+                #                self._log.debug(carsignals)
                 return carsignals
         except AttributeError:
             self._log.error(u"### Car Id '%s', ERROR while reading car status." % carid)
