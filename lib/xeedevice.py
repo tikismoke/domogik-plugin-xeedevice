@@ -32,8 +32,8 @@ class XEE, xeeException
 @organization: Domogik
 """
 
-import traceback
 import subprocess
+import traceback
 
 try:
     from xee import Xee
@@ -110,11 +110,11 @@ class XEEclass:
                 self.token = pickle.load(xee_token_file)
                 self._log.debug(u"Getting user")
                 user, error = xee.get_user(self.token.access_token)
-                if error != None:
+                if error is not None:
                     self._log.warning(u"Error getting user, try refreshing with token_refresh from file")
                     self._log.warning(error)
                     self.token, error = self.xee.get_token_from_refresh_token(self.token.refresh_token)
-                    if error != None:
+                    if error is not None:
                         self._log.error(u"Error getting user, from refresh token")
                         self._log.error(error)
                         sys.exit("refreshing token failed from refresh_token")
@@ -144,7 +144,7 @@ class XEEclass:
         """
         try:
             car, error = self.xee.get_car(int(carid), self.token.access_token)
-            if error != None:
+            if error is not None:
                 self._log.debug(error)
                 self.open_token(self.xee)
                 return "failed"
@@ -166,7 +166,7 @@ class XEEclass:
         """
         try:
             carsignals, error = self.xee.get_signals(int(carid), self.token.access_token, begin=begindate)
-            if error != None:
+            if error is not None:
                 self.open_token(self.xee)
                 self._log.debug(error)
                 return "failed"
@@ -188,7 +188,7 @@ class XEEclass:
         """
         try:
             position, error = self.xee.get_locations(int(carid), self.token.access_token, begin=begindate)
-            if error != None:
+            if error is not None:
                 self.open_token(self.xee)
                 self._log.debug(error)
                 return "failed"
@@ -212,7 +212,7 @@ class XEEclass:
                 for sensor in self._sensors:
                     if sensor['device_type'] == "xee.information":
                         val = self.readXeeApiCar(sensor['sensor_carid'])
-                        if val != None:
+                        if val is not None:
                             send_sensor(sensor['device_id'], 'name', val.name, None)
                             send_sensor(sensor['device_id'], 'make', val.make, None)
                             send_sensor(sensor['device_id'], 'carid', val.id, None)
@@ -222,7 +222,7 @@ class XEEclass:
                                                   tzinfo=pytz.utc)
                         begin = today - datetime.timedelta(seconds=self.period)
                         val = self.readXeeApiSignals(sensor['sensor_carid'], begin)
-                        if val != None:
+                        if val is not None:
                             self._log.debug(val)
                             position = u''
                             for sensors in val:
@@ -287,7 +287,7 @@ class XEEclass:
                                     timestamp = calendar.timegm(sensors.date.timetuple())
                                     send_sensor(sensor['device_id'], sensor_name, sensors.value, timestamp)
                         val = self.readXeeApiPosition(sensor['sensor_carid'], begin)
-                        if val != None:
+                        if val is not None:
                             for locations in val:
                                 location = str(locations.latitude) + "," + str(locations.longitude)
                                 if position != u'':
