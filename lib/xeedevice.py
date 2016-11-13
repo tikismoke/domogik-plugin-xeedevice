@@ -49,6 +49,7 @@ import datetime
 import calendar
 import pytz
 
+
 class xeeException(Exception):
     """
     XEE exception
@@ -148,15 +149,15 @@ class XEEclass:
                 self.open_token(self.xee)
                 return "failed"
             else:
-#                self._log.debug(car)
+                #                self._log.debug(car)
                 return car
-	except AttributeError:
+        except AttributeError:
             self._log.error(u"### Car Id '%s', ERROR while reading car." % carid)
-        except :
+        except:
             self._log.error(u"Xee Exception : {0}".format(traceback.format_exc()))
-#        finally :
+            #        finally :
             self.open_token(self.xee)
-#            return "failed"
+            #            return "failed"
 
     # -------------------------------------------------------------------------------------------------
     def readXeeApiSignals(self, carid, begindate):
@@ -172,13 +173,13 @@ class XEEclass:
             else:
                 self._log.debug(carsignals)
                 return carsignals
-	except AttributeError:
+        except AttributeError:
             self._log.error(u"### Car Id '%s', ERROR while reading car status." % carid)
-        except :
-	    self._log.error(u"Xee Exception : {0}".format(traceback.format_exc()))
-#	finally :
+        except:
+            self._log.error(u"Xee Exception : {0}".format(traceback.format_exc()))
+            #	finally :
             self.open_token(self.xee)
-#            return "failed"
+            #            return "failed"
 
     # -------------------------------------------------------------------------------------------------
     def readXeeApiPosition(self, carid, begindate):
@@ -192,15 +193,15 @@ class XEEclass:
                 self._log.debug(error)
                 return "failed"
             else:
-#                self._log.debug(position)
+                #                self._log.debug(position)
                 return position
-	except AttributeError:
+        except AttributeError:
             self._log.error(u"### Car Id '%s', ERROR while reading car status." % carid)
-        except :
-	    self._log.error(u"Xee Exception : {0}".format(traceback.format_exc()))
-#	finally :
+        except:
+            self._log.error(u"Xee Exception : {0}".format(traceback.format_exc()))
+            #	finally :
             self.open_token(self.xee)
-#            return "failed"
+            #            return "failed"
 
     # -------------------------------------------------------------------------------------------------
     def loop_read_sensor(self, send_sensor, stop):
@@ -215,56 +216,85 @@ class XEEclass:
                             send_sensor(sensor['device_id'], 'name', val.name, None)
                             send_sensor(sensor['device_id'], 'make', val.make, None)
                             send_sensor(sensor['device_id'], 'carid', val.id, None)
-                    elif sensor['device_type'] == "xee.car.status":
-			now = datetime.datetime.now(pytz.utc)
-			today = datetime.datetime(now.year, now.month, now.day, now.hour, now.minute, now.second, tzinfo=pytz.utc)
-			begin = today - datetime.timedelta(seconds=self.period)
+                    else:
+                        now = datetime.datetime.now(pytz.utc)
+                        today = datetime.datetime(now.year, now.month, now.day, now.hour, now.minute, now.second,
+                                                  tzinfo=pytz.utc)
+                        begin = today - datetime.timedelta(seconds=self.period)
                         val = self.readXeeApiSignals(sensor['sensor_carid'], begin)
                         if val != None:
                             self._log.debug(val)
                             position = u''
                             for sensors in val:
                                 sensor_name = u''
-                                if sensors.name == "VehiculeSpeed":
-                                    sensor_name = "speed"
-                                elif sensors.name == "Odometer":
-                                    sensor_name = "odometer"
-                                elif sensors.name == "FuelLevel":
-                                    sensor_name = "fuel_level"
-                                elif sensors.name == "BatteryVoltage":
+                                # XeeCONNECT
+                                if sensors.name == "BatteryVoltage":
                                     sensor_name = "battery_voltage"
-                                elif sensors.name == "LockSts":
-                                    sensor_name = "lock_status"
-                                elif sensors.name == "IgnitionSts":
-                                    sensor_name = "ignition_status"
-#				    if sensors.value == "1":
-#					self.period = 45
-#					self._log.debug(u"moteur on")
-#				    else :
-#					self.period=180
-#					self._log.debug(u"moteur off")
+                                # Lights
+                                elif sensors.name == "FrontFogLightSts":
+                                    sensor_name = ""
+                                elif sensors.name == "RearFogLightSts":
+                                    sensor_name = ""
+                                elif sensors.name == "HazardSts":
+                                    sensor_name = ""
                                 elif sensors.name == "HeadLightSts":
                                     sensor_name = "headlight_status"
                                 elif sensors.name == "HighBeamSts":
                                     sensor_name = "highbeam_status"
                                 elif sensors.name == "LowBeamSts":
                                     sensor_name = "lowbeam_status"
+                                elif sensors.name == "LeftIndicatorSts":
+                                    sensor_name = ""
+                                elif sensors.name == "RightIndicatorSts":
+                                    sensor_name = ""
+                                # Misc
+                                elif sensors.name == "FuelLevel":
+                                    sensor_name = "fuel_level"
+                                elif sensors.name == "IgnitionSts":
+                                    sensor_name = "ignition_status"
+                                # if sensors.value == "1":
+                                #					self.period = 45
+                                #					self._log.debug(u"moteur on")
+                                #				    else :
+                                #					self.period=180
+                                #					self._log.debug(u"moteur off")
+                                elif sensors.name == "Odometer":
+                                    sensor_name = "odometer"
+                                elif sensors.name == "LockSts":
+                                    sensor_name = "lock_status"
+                                # Wipers
+                                elif sensors.name == "IntermittentWiperSts":
+                                    sensor_name = ""
+                                elif sensors.name == "ManualWiperSts":
+                                    sensor_name = ""
+                                elif sensors.name == "LowSpeedWiperSts":
+                                    sensor_name = ""
+                                elif sensors.name == "HighSpeedWiperSts":
+                                    sensor_name = ""
+                                elif sensors.name == "AutoRearWiperSts":
+                                    sensor_name = ""
+                                elif sensors.name == "ManualRearWiperSts":
+                                    sensor_name = ""
+                                # Speed
+                                elif sensors.name == "EngineSpeed":
+                                    sensor_name = ""
+                                elif sensors.name == "VehiculeSpeed":
+                                    sensor_name = "speed"
+                                # Computed
+                                elif sensors.name == "ComputedFuelLevel":
+                                    sensor_name = ""
                                 if sensor_name != u'':
                                     timestamp = calendar.timegm(sensors.date.timetuple())
                                     send_sensor(sensor['device_id'], sensor_name, sensors.value, timestamp)
-#			    position = str(val.location.latitude) + "," + str(val.location.longitude)
-#                            if position != u'':
-#                                timestamp = calendar.timegm(val.location.date.timetuple())
-#                                send_sensor(sensor['device_id'], 'position', position, timestamp)
-			val = self.readXeeApiPosition(sensor['sensor_carid'], begin)
-			if val != None:
+                        val = self.readXeeApiPosition(sensor['sensor_carid'], begin)
+                        if val != None:
                             for locations in val:
-				position = str(locations.latitude) + "," + str(locations.longitude)
-	                        if position != u'':
-    		                    timestamp = calendar.timegm(locations.date.timetuple())
-                            	    send_sensor(sensor['device_id'], 'position', position, timestamp)
+                                position = str(locations.latitude) + "," + str(locations.longitude)
+                                if position != u'':
+                                    timestamp = calendar.timegm(locations.date.timetuple())
+                                    send_sensor(sensor['device_id'], 'position', position, timestamp)
                     self._log.debug(u"=> '{0}' : wait for {1} seconds".format(sensor['device_name'], self.period))
-            except Exception, e :
-		self._log.error(u"# Loop_read_sensors EXCEPTION: {0}".format(traceback.format_exc())) 
+            except Exception, e:
+                self._log.error(u"# Loop_read_sensors EXCEPTION: {0}".format(traceback.format_exc()))
                 pass
             stop.wait(self.period)
