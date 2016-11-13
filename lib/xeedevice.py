@@ -211,7 +211,7 @@ class XEEclass:
                 for sensor in self._sensors:
                     if sensor['device_type'] == "xee.car":
                         val = self.readXeeApiCar(sensor['sensor_carid'])
-                        if val != "failed":
+                        if val != None:
                             send_sensor(sensor['device_id'], 'name', val.name, None)
                             send_sensor(sensor['device_id'], 'make', val.make, None)
                             send_sensor(sensor['device_id'], 'carid', val.id, None)
@@ -237,12 +237,12 @@ class XEEclass:
                                     sensor_name = "lock_status"
                                 elif sensors.name == "IgnitionSts":
                                     sensor_name = "ignition_status"
-				    if sensors.value==u'1':
-					self.period=30
-					self._log.debug(u"moteur on")
-				    else :
-					self.period=180
-					self._log.debug(u"moteur off")
+#				    if sensors.value == "1":
+#					self.period = 45
+#					self._log.debug(u"moteur on")
+#				    else :
+#					self.period=180
+#					self._log.debug(u"moteur off")
                                 elif sensors.name == "HeadLightSts":
                                     sensor_name = "headlight_status"
                                 elif sensors.name == "HighBeamSts":
@@ -257,7 +257,7 @@ class XEEclass:
 #                                timestamp = calendar.timegm(val.location.date.timetuple())
 #                                send_sensor(sensor['device_id'], 'position', position, timestamp)
 			val = self.readXeeApiPosition(sensor['sensor_carid'], begin)
-			if val != "failed":
+			if val != None:
                             for locations in val:
 				position = str(locations.latitude) + "," + str(locations.longitude)
 	                        if position != u'':
