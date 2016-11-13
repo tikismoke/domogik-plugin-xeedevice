@@ -60,8 +60,8 @@ In clients page of admin UI, go to **plugin-xeedevice-<your_host_domogik>**, sel
 
 Chose one way creation by product or device type.
 
-device_types : car
-******************
+device_types : xee.information
+******************************
 
 +-------------------+-------------------+------------------------------------------------------------------------------+
 | Key               | Example           | Description                                                                  |
@@ -77,7 +77,7 @@ device_types : car
 | carid             | 10000             | Id of a car from you xee account. See advanced page to get all Car Id        |
 +-------------------+-------------------+------------------------------------------------------------------------------+
 
-device_types : car.status
+device_types : xee.status
 *************************
 
 +-------------------+-------------------+------------------------------------------------------------------------------+
