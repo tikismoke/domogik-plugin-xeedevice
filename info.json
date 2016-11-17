@@ -27,6 +27,13 @@
     	"required": "yes",
     	"default": "600",
     	"type": "integer"
+    }, {
+    	"description": "Speed refresh period in seconds when car is on",
+    	"key": "speed_period",
+    	"name": "Speed Period",
+    	"required": "yes",
+    	"default": "60",
+    	"type": "integer"
     }],
     "commands": {},
     "xpl_commands": {},
