@@ -431,10 +431,23 @@
 		"type": "integer"
 	    }]
 	},
-	"xee.status": {
-	    "id": "xee.status",
-	    "description": "Car Status",
-	    "name": "Xee car status",
+	"xee.status.simple": {
+	    "id": "xee.status.simple",
+	    "description": "Simple Car Status",
+	    "name": "Xee simple car status",
+	    "commands": [],
+	    "sensors": ["battery_voltage", "ignition_status", "odometer", "lock_status", "computed_fuel_level"],
+	    "parameters": [{
+		"key": "carid",
+		"xpl": false,
+		"description": "carid of the car",
+		"type": "integer"
+	    }]
+	},
+	"xee.status.full": {
+	    "id": "xee.status.full",
+	    "description": "Full Car Status",
+	    "name": "Xee full car status",
 	    "commands": [],
 	    "sensors": ["battery_voltage", "fuel_level", "ignition_status", "odometer", "lock_status", "engine_speed", "vehicle_speed", "computed_fuel_level"],
 	    "parameters": [{
