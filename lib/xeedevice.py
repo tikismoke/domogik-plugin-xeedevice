@@ -69,7 +69,6 @@ class XEEclass:
     """
 
     # -------------------------------------------------------------------------------------------------
-#    def __init__(self, log, client_id, client_secret, redirect_url, period, dataPath):
     def __init__(self, log, client_id, client_secret, redirect_url, period, speed_period, dataPath):
         try:
             """
@@ -269,6 +268,52 @@ class XEEclass:
                                 if sensor['device_type'] == "xee.status":
                                     # Misc
                                     if sensors.name == "FuelLevel":
+                                        sensor_name = "fuel_level"
+                                    elif sensors.name == "IgnitionSts":
+                                        sensor_name = "ignition_status"
+                                	if sensors.value == 1:
+	                            	    self.period = self.speed_period
+                                    	    self._log.debug(u"moteur on")
+                                        else :
+                                	    self.period = self.saved_period
+                            		    self._log.debug(u"moteur off")
+                                    elif sensors.name == "Odometer":
+                                        sensor_name = "odometer"
+                                    elif sensors.name == "LockSts":
+                                        sensor_name = "lock_status"
+                                if sensor['device_type'] == "xee.status.full":
+				    # XeeCONNECT
+                                    if sensors.name == "BatteryVoltage":
+                                        sensor_name = "battery_voltage"
+                                    # Misc
+                                    elif sensors.name == "FuelLevel":
+                                        sensor_name = "fuel_level"
+                                    elif sensors.name == "IgnitionSts":
+                                        sensor_name = "ignition_status"
+                                	if sensors.value == 1:
+	                            	    self.period = self.speed_period
+                                    	    self._log.debug(u"moteur on")
+                                        else :
+                                	    self.period = self.saved_period
+                            		    self._log.debug(u"moteur off")
+                                    elif sensors.name == "Odometer":
+                                        sensor_name = "odometer"
+                                    elif sensors.name == "LockSts":
+                                        sensor_name = "lock_status"
+                                    # Speed
+                                    elif sensors.name == "EngineSpeed":
+                                        sensor_name = "engine_speed"
+                                    elif sensors.name == "VehiculeSpeed":
+                                        sensor_name = "vehicle_speed"
+                                    # Computed
+                                    elif sensors.name == "ComputedFuelLevel":
+                                        sensor_name = "computed_fuel_level"
+                                if sensor['device_type'] == "xee.status.simple":
+				    # XeeCONNECT
+                                    if sensors.name == "BatteryVoltage":
+                                        sensor_name = "battery_voltage"
+                                    # Misc
+                                    elif sensors.name == "FuelLevel":
                                         sensor_name = "fuel_level"
                                     elif sensors.name == "IgnitionSts":
                                         sensor_name = "ignition_status"

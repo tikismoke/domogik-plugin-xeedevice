@@ -77,7 +77,6 @@ class xeeManager(Plugin):
 
         # ### Open the XEE lib
         try:
-#            self.XEEclass = XEEclass(self.log, client_id, client_secret, redirect_url, period, dataPath=pathData)
             self.XEEclass = XEEclass(self.log, client_id, client_secret, redirect_url, period, speed_period, dataPath=pathData)
         except xeeException as e:
             self.log.error(e.value)
